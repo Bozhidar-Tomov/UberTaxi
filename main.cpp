@@ -5,12 +5,18 @@
 
 int main()
 {
-    MyString r("password");
+    MyString n1("name1");
+    MyString n2("name2");
+    MyString n3("name3");
 
-    VectorString vec(32);
-    vec.push_back(r);
+    VectorString vec(3);
+    vec.push_back(n1);
+    vec.push_back(n2);
+    vec.push_back(n3);
 
-    std::cout << vec[0];
+    User user2(MyString(" hello world "), MyString("hello world"), 25, 0);
+    int money[]{1, 2, 3, 4, 5, 6};
+    user2.deleteAccount(vec, vec, money);
 
-    User user2(MyString("hello world"), std::move(r), 25);
+    // User nk = login("name2", "pass", vec, vec, money);
 }

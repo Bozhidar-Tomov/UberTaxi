@@ -1,12 +1,10 @@
 #include "User.h"
-#include "constants.h"
-#include <fstream>
 
-User::User(const MyString &userName, const MyString &password, double moneyAvailable) : _userName(userName), _password(password), _moneyAvailable(moneyAvailable)
+User::User(const MyString &userName, const MyString &password, double moneyAvailable, size_t idx) : _userName(userName), _password(password), _moneyAvailable(moneyAvailable), _idx(idx)
 {
 }
 
-User::User(const char *userName, const char *password, double moneyAvailable) : _userName(userName), _password(password), _moneyAvailable(moneyAvailable)
+User::User(const char *userName, const char *password, double moneyAvailable, size_t idx) : _userName(userName), _password(password), _moneyAvailable(moneyAvailable), _idx(idx)
 {
 }
 
@@ -14,11 +12,31 @@ User::User(MyString &&userName, MyString &&password, double moneyAvailable) : _u
 {
 }
 
-void User::login(const char *userName, const char *password)
+double User::getMoneyAvailable() const noexcept
 {
-    std::ifstream file(FILE_NAME);
+    return _moneyAvailable;
+}
 
-    if (!file.eof())
+void User::deleteAccount(const VectorString &usernames, const VectorString &passwords, int *usersMoney)
+{
+    usernames[_idx].~MyString();
+    passwords[_idx].~MyString();
+    usersMoney[_idx] = INT_MIN;
+}
+
+User login(const char *username, const char *password, const VectorString &passwords, const VectorString &usernames, const int *usersMoney)
+{
+    size_t size = usernames.size();
+
+    for (size_t i = 0; i < size; ++i)
     {
+        if (username != usernames[i])
+            continue;
+
+        if (password != passwords[i])
+            throw std::invalid_argument("Incorrect password.");
+
+        return User(username, password, usersMoney[i], i);
     }
+    throw std::invalid_argument("User not found.");
 }

@@ -362,29 +362,51 @@ size_t MyString::find_last_of(char ch, size_t pos) const noexcept
     return -1;
 }
 
+// MyString MyString::substr(size_t start, size_t len) const
+// {
+//     if (start > _size || len == 0)
+//     {
+//         throw std::invalid_argument("Indexes out of range.");
+//     }
+
+//     MyString temp;
+
+//     if (start == _size)
+//     {
+//         return temp;
+//     }
+
+//     temp.reserve(len);
+
+//     for (size_t i = 0; i < len; ++i)
+//     {
+//         if (start + i > _size)
+//         {
+//             break;
+//         }
+//         temp.push_back(at(start + i));
+//     }
+
+//     return temp;
+// }
+
 MyString MyString::substr(size_t start, size_t len) const
 {
     if (start > _size || len == 0)
-    {
         throw std::invalid_argument("Indexes out of range.");
-    }
+
+    MyString temp("");
 
     if (start == _size)
-    {
-        return "";
-    }
+        return temp;
 
-    MyString temp;
     temp.reserve(len);
 
-    for (size_t i = 0; i < len; ++i)
-    {
-        if (start + i > _size)
-        {
-            break;
-        }
-        temp.push_back(at(start + i));
-    }
+    char *p = _data + start;
+    char *end = p + len;
+
+    while (p < end && p < _data + _size)
+        temp.push_back(*p++);
 
     return temp;
 }
@@ -397,9 +419,8 @@ size_t MyString::compare(const MyString &other) const
 size_t MyString::compare(const char *data) const
 {
     if (!data)
-    {
         throw std::invalid_argument("Empty String Exception (nullptr).");
-    }
+
     return myStrCmp(_data, data);
 }
 
@@ -421,7 +442,27 @@ bool operator==(const MyString &lhs, const MyString &rhs)
     return lhs.compare(rhs) == 0;
 }
 
+bool operator==(const char *lhs, const MyString &rhs)
+{
+    return rhs.compare(lhs) == 0;
+}
+
+bool operator==(const MyString &lhs, const char *rhs)
+{
+    return lhs.compare(rhs) == 0;
+}
+
 bool operator!=(const MyString &lhs, const MyString &rhs)
+{
+    return !(lhs == rhs);
+}
+
+bool operator!=(const char *lhs, const MyString &rhs)
+{
+    return !(lhs == rhs);
+}
+
+bool operator!=(const MyString &lhs, const char *rhs)
 {
     return !(lhs == rhs);
 }
@@ -431,8 +472,6 @@ bool operator<(const MyString &lhs, const MyString &rhs)
     return lhs.compare(rhs) < 0;
 }
 
-// never gets called because const char* is converted to MyString object first by converting constructor.
-// leaving code for completeness.
 bool operator<(const char *lhs, const MyString &rhs)
 {
     return rhs.compare(lhs) > 0;
@@ -443,8 +482,6 @@ bool operator>(const MyString &lhs, const MyString &rhs)
     return lhs.compare(rhs) > 0;
 }
 
-// never gets called because const char* is converted to MyString object first by converting constructor.
-// leaving code for completeness.
 bool operator>(const char *lhs, const MyString &rhs)
 {
     return rhs.compare(rhs) < 0;
@@ -455,11 +492,9 @@ bool operator>=(const MyString &lhs, const MyString &rhs)
     return !(lhs < rhs);
 }
 
-// never gets called because const char* is converted to MyString object first by converting constructor.
-// leaving code for completeness.
 bool operator>=(const char *lhs, const MyString &rhs)
 {
-    return !(rhs > rhs);
+    return !(lhs < rhs);
 }
 
 bool operator<=(const MyString &lhs, const MyString &rhs)
@@ -467,9 +502,7 @@ bool operator<=(const MyString &lhs, const MyString &rhs)
     return !(lhs > rhs);
 }
 
-// never gets called because const char* is converted to MyString object first by converting constructor.
-// leaving code for completeness.
 bool operator<=(const char *lhs, const MyString &rhs)
 {
-    return !(rhs < lhs);
+    return !(lhs > rhs);
 }

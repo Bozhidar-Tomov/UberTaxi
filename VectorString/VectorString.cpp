@@ -71,6 +71,16 @@ void VectorString::pop_back()
     }
 }
 
+size_t VectorString::size() const noexcept
+{
+    return _size;
+}
+
+size_t VectorString::capacity() const noexcept
+{
+    return _capacity;
+}
+
 bool VectorString::empty() const noexcept
 {
     return !_size;

@@ -1,3 +1,4 @@
+#pragma once
 #include "../MyString/MyString.h"
 
 static const size_t DEFAULT_CAPACITY_VECTOR = 8;
@@ -24,6 +25,8 @@ public:
     void push_back(const MyString &);
     void pop_back();
 
+    size_t size() const noexcept;
+    size_t capacity() const noexcept;
     bool empty() const noexcept;
 
     // Element access:

@@ -12,7 +12,7 @@ class MyString
 public:
     // Big 6
     MyString();
-    MyString(const char *);
+    explicit MyString(const char *);
 
     MyString(const MyString &);
     MyString(MyString &&) noexcept;
@@ -87,7 +87,12 @@ std::ostream &operator<<(std::ostream &, const MyString &) noexcept;
 MyString operator+(const MyString &, const MyString &);
 
 bool operator==(const MyString &, const MyString &);
+bool operator==(const char *, const MyString &);
+bool operator==(const MyString &, const char *);
+
 bool operator!=(const MyString &, const MyString &);
+bool operator!=(const char *, const MyString &);
+bool operator!=(const MyString &, const char *);
 
 bool operator<(const MyString &, const MyString &);
 bool operator>(const MyString &, const MyString &);
