@@ -164,7 +164,7 @@ void MyString::clear()
     _size = 0;
 }
 
-bool MyString::empty() const
+bool MyString::empty() const noexcept
 {
     return !_size;
 }
@@ -193,7 +193,7 @@ const char &MyString::operator[](size_t idx) const
 
 char &MyString::at(size_t idx)
 {
-    if (idx < 0 || idx > _size)
+    if (idx >= _size)
         throw std::out_of_range("Index out of range.");
 
     return _data[idx];
@@ -201,7 +201,7 @@ char &MyString::at(size_t idx)
 
 const char &MyString::at(size_t idx) const
 {
-    if (idx < 0 || idx > _size)
+    if (idx >= _size)
         throw std::out_of_range("Index out of range.");
 
     return _data[idx];
@@ -209,7 +209,7 @@ const char &MyString::at(size_t idx) const
 
 char &MyString::front()
 {
-    if (!_size)
+    if (!_size || !_data)
         throw std::invalid_argument("Empty String Exception (nullptr).");
 
     return _data[0];
@@ -217,7 +217,7 @@ char &MyString::front()
 
 const char &MyString::front() const
 {
-    if (!_size)
+    if (!_size || !_data)
         throw std::invalid_argument("Empty String Exception (nullptr).");
 
     return _data[0];

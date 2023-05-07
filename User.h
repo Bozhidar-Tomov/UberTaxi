@@ -13,7 +13,7 @@ public:
     User(const char *, const char *, double = 0);
     User(MyString &&, MyString &&, double = 0);
 
-    void login();
+    void login(const char *, const char *);
     void logout();
     void deleteAccount();
     void getMoneyAvailable() const noexcept;

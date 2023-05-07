@@ -1,7 +1,7 @@
 #pragma once
 #include <ostream>
 
-const size_t DEFAULT_CAPACITY = 8;
+static const size_t DEFAULT_CAPACITY = 8;
 
 class MyString
 {
@@ -32,7 +32,7 @@ public:
     size_t capacity() const noexcept;
     void reserve(size_t);
     void clear();
-    bool empty() const;
+    bool empty() const noexcept;
     void shrink_to_fit();
 
     // Element access:
