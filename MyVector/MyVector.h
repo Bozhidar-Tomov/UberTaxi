@@ -1,4 +1,7 @@
 #pragma once
+#include <stddef.h>  // including std::size_t
+#include <utility>   // includeing std::move
+#include <stdexcept> // includeing std::excepton
 
 static const size_t DEFAULT_CAPACITY_VECTOR = 8;
 
@@ -23,6 +26,7 @@ public:
 
 public:
     void push_back(const Type &);
+    void push_back(const Type &&) noexcept;
     void pop_back();
 
     size_t size() const noexcept;

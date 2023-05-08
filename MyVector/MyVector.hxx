@@ -77,6 +77,18 @@ void MyVector<Type>::push_back(const Type &element)
 }
 
 template <typename Type>
+void MyVector<Type>::push_back(const Type &&element) noexcept
+{
+    if (_size >= _capacity)
+    {
+        _capacity <<= 1;
+        resize();
+    }
+
+    _data[_size++] = std::move(element);
+}
+
+template <typename Type>
 void MyVector<Type>::pop_back()
 {
     if (_size)
