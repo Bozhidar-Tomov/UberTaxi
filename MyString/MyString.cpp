@@ -276,6 +276,12 @@ void MyString::push_back(char ch)
     _data[_size] = '\0';
 }
 
+void MyString::reset_data() noexcept
+{
+    _data[0] = '\0';
+    _size = 0;
+}
+
 MyString &MyString::replace(size_t start, size_t len, const MyString &other)
 {
     MyString temp = substr(0, start);

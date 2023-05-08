@@ -1,4 +1,5 @@
 #include "User.h"
+#include <iostream>
 
 User::User(const MyString &userName, const MyString &password, double moneyAvailable, size_t idx) : _userName(userName), _password(password), _moneyAvailable(moneyAvailable), _idx(idx)
 {
@@ -17,14 +18,14 @@ double User::getMoneyAvailable() const noexcept
     return _moneyAvailable;
 }
 
-void User::deleteAccount(const VectorString &usernames, const VectorString &passwords, int *usersMoney)
+void User::deleteAccount(const MyVector<MyString> &usernames, const MyVector<MyString> &passwords, int *usersMoney)
 {
     usernames[_idx].~MyString();
     passwords[_idx].~MyString();
     usersMoney[_idx] = INT_MIN;
 }
 
-User login(const char *username, const char *password, const VectorString &passwords, const VectorString &usernames, const int *usersMoney)
+User login(const char *username, const char *password, const MyVector<MyString> &passwords, const MyVector<MyString> &usernames, const int *usersMoney)
 {
     size_t size = usernames.size();
 

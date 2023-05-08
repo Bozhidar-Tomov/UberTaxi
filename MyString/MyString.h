@@ -57,6 +57,8 @@ public:
 
     void push_back(char);
 
+    void reset_data() noexcept;
+
     MyString &replace(size_t, size_t, const MyString &);
     MyString &replace(size_t, size_t, size_t, char);
 
