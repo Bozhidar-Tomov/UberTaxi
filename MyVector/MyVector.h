@@ -5,6 +5,7 @@
 
 static const size_t DEFAULT_CAPACITY_VECTOR = 8;
 
+// TODO: maybe use pointer array instead of Type object array to avoid unnecessary constructor calls
 template <typename Type>
 class MyVector
 {
