@@ -18,10 +18,19 @@ void User::setName(const char *name)
     _name.reset_data();
     _name.append(name);
 }
+const MyString &User::getName() const
+{
+    return _name;
+}
 void User::setPassword(const char *password)
 {
     _password.reset_data();
     _password.append(password);
+}
+
+const MyString &User::getPassword() const
+{
+    return _password;
 }
 
 void User::setMoneyAvailable(double moneyAvailable) noexcept

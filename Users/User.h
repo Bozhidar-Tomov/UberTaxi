@@ -18,10 +18,14 @@ public:
     User(MyString &&, MyString &&, double);
 
     void setName(const char *);
-    void setPassword(const char *);
-    void setMoneyAvailable(double) noexcept;
+    const MyString &getName() const;
 
+    void setPassword(const char *);
+    const MyString &getPassword() const;
+
+    void setMoneyAvailable(double) noexcept;
     double getMoneyAvailable() const noexcept;
+
     void addOrder(Order const *);
     void removeOrder();
     bool hasOrder() const;
@@ -29,6 +33,8 @@ public:
     void deleteAccount(const MyVector<MyString> &, const MyVector<MyString> &, int *);
 
     friend std::ostream &operator<<(std::ostream &, const User &);
-};
 
-User login(const char *, const char *, const MyVector<MyString> &, const MyVector<MyString> &, const int *);
+private:
+    bool validateUsername(const char *) const;
+    bool validatePassword(const char *) const;
+};

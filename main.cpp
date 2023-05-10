@@ -6,6 +6,7 @@
 
 int main()
 {
+
     MyString n1("name1");
     MyString n2("name2");
     MyString n3("name3");
@@ -34,6 +35,9 @@ int main()
     sys.clients.at(3).setName("__________________");
     sys.saveData();
     std::cout << sys.clients[0];
+    std::cout << sys.drivers[0];
+
+    User const *user = sys.loginUser("abc def", "12345", UserType::client);
 
     int stop = 0;
 }

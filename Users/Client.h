@@ -2,7 +2,7 @@
 #include "../MyString/MyString.h"
 #include "User.h"
 
-class Client : private User
+class Client : public User
 {
 
 public:
@@ -10,9 +10,6 @@ public:
     Client(const MyString &, const MyString &, double);
     Client(const char *, const char *, double);
 
-    void setName(const char *);
-    void setPassword(const char *);
-    void setMoneyAvailable(double);
     void order();
     void checkOrder();
     void cancelOrder();
