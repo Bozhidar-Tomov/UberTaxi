@@ -2,6 +2,7 @@
 #include "MyString/MyString.h"
 #include "MyVector/MyVector.h"
 #include "Users/Client.h"
+#include "Order.h"
 #include "System.h"
 
 int main()
@@ -15,7 +16,7 @@ int main()
     MyVector<MyString> vec1;
     MyVector<User> vec2;
 
-    Client u("he", "he", 2);
+    // Client u("he", "he", 2);
     // vec1.push_back(n1);
     // vec2.push_back(u);
 
@@ -37,7 +38,11 @@ int main()
     std::cout << sys.clients[0];
     std::cout << sys.drivers[0];
 
-    User const *user = sys.loginUser("abc def", "12345", UserType::client);
+    User r("hi", "hi", 5, nullptr);
+    // TODO: const correctness and polymorphic hierarchy
+    User *user = sys.loginUser("abc def", "12345", UserType::driver);
+
+    // (Client *)user->order();
 
     int stop = 0;
 }
