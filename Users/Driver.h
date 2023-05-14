@@ -9,9 +9,9 @@ class Driver : public User
 
 public:
     Driver() = default;
-    Driver(const char *, const char *, double,
+    Driver(const char *, const char *, double, System *,
            const char *, const char *);
-    Driver(const MyString &, const MyString &, double,
+    Driver(const MyString &, const MyString &, double, System *,
            const MyString &, const MyString &);
 
     void setPhoneNumber(const char *);

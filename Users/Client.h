@@ -7,10 +7,10 @@ class Client : public User
 
 public:
     Client() = default;
-    Client(const MyString &, const MyString &, double);
-    Client(const char *, const char *, double);
+    Client(const MyString &, const MyString &, double, System *);
+    Client(const char *, const char *, double, System *);
 
-    void order();
+    void order(const char *address, const char *dest);
     void checkOrder();
     void cancelOrder();
     void payOrder();

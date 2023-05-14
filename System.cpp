@@ -142,6 +142,8 @@ static bool validatePassword(const char *password)
 
         else if (isLower(*password))
             hasLower = true;
+        else if (*password == DELIM)
+            throw std::invalid_argument("Invalid symbol found.");
         else
             hasSymbol = true;
     }
@@ -152,7 +154,7 @@ static bool validatePassword(const char *password)
     return hasDigit && hasUpper && hasLower && hasSymbol;
 }
 
-User const *System::loginUser(const char *name, const char *password, const UserType userType)
+User *System::loginUser(const char *name, const char *password, const UserType userType)
 {
     if (userType == UserType::client)
     {
@@ -186,7 +188,7 @@ User const *System::registerClient(const char *name, const char *password, doubl
     if (!validateUsername(name) || !validatePassword(password))
         return nullptr;
 
-    clients.push_back(std::move(Client(name, password, moneyAvailable)));
+    clients.push_back(std::move(Client(name, password, moneyAvailable, this)));
     return &clients[clients.size() - 1];
 }
 
@@ -199,7 +201,7 @@ User const *System::registerDriver(const char *name, const char *password, const
     if (!validateUsername(name) || !validatePassword(password))
         return nullptr;
 
-    drivers.push_back(std::move(Driver(name, password, moneyAvailable, phoneNumber, plateNumber)));
+    drivers.push_back(std::move(Driver(name, password, moneyAvailable, this, phoneNumber, plateNumber)));
     return &drivers[drivers.size() - 1];
 }
 
@@ -239,4 +241,9 @@ Driver System::parseLineDriver(std::stringstream &stream, char *line)
     driver.setPlateNumber(line);
 
     return driver;
+}
+
+void System::addOrder(const Order &newOrder)
+{
+    orders.push_back(newOrder);
 }

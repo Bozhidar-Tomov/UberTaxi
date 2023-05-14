@@ -4,17 +4,21 @@
 #include <ostream>
 
 class Order;
+class System;
 class User
 {
+protected:
     MyString _name;
     MyString _password;
     Order const *_currentOrder = nullptr;
     double _moneyAvailable = 0;
 
+    System *_sys = nullptr;
+
 public:
     User() = default;
-    User(const MyString &, const MyString &, double);
-    User(const char *, const char *, double);
+    User(const MyString &, const MyString &, double, System *);
+    User(const char *, const char *, double, System *);
     User(MyString &&, MyString &&, double);
 
     void setName(const char *);
@@ -28,13 +32,7 @@ public:
 
     void addOrder(Order const *);
     void removeOrder();
-    bool hasOrder() const;
-    // void logout();
-    void deleteAccount(const MyVector<MyString> &, const MyVector<MyString> &, int *);
+    bool hasOrder() const noexcept;
 
     friend std::ostream &operator<<(std::ostream &, const User &);
-
-private:
-    bool validateUsername(const char *) const;
-    bool validatePassword(const char *) const;
 };

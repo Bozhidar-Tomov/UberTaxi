@@ -1,13 +1,13 @@
 #include "Driver.h"
 
-Driver::Driver(const char *userName, const char *password, double moneyAvailable,
-               const char *phoneNumber, const char *plateNumber) : User(userName, password, moneyAvailable),
+Driver::Driver(const char *userName, const char *password, double moneyAvailable, System *sys,
+               const char *phoneNumber, const char *plateNumber) : User(userName, password, moneyAvailable, sys),
                                                                    _phoneNumber(phoneNumber), _plateNumber(plateNumber)
 {
 }
 
-Driver::Driver(const MyString &userName, const MyString &password, double moneyAvailable,
-               const MyString &phoneNumber, const MyString &plateNumber) : User(userName, password, moneyAvailable),
+Driver::Driver(const MyString &userName, const MyString &password, double moneyAvailable, System *sys,
+               const MyString &phoneNumber, const MyString &plateNumber) : User(userName, password, moneyAvailable, sys),
                                                                            _phoneNumber(phoneNumber), _plateNumber(plateNumber)
 {
 }

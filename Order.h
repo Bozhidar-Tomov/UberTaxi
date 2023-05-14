@@ -1,8 +1,10 @@
 #pragma once
 #include "MyString/MyString.h"
-#include "Users/Client.h"
-#include "Users/Driver.h"
+// #include "Users/Client.h"
+// #include "Users/Driver.h"
 
+class Client;
+class Driver;
 class Order
 {
     MyString _address;
