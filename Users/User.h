@@ -14,14 +14,15 @@ class User
 public:
     User() = default;
     User(const MyString &, const MyString &, double);
-    User(const char *, const char *, double);
     User(MyString &&, MyString &&, double);
 
-    void setName(const char *);
-    const MyString &getName() const;
+    void setName(const MyString &);
+    void setName(MyString &&);
+    const MyString &getName() const noexcept;
 
-    void setPassword(const char *);
-    const MyString &getPassword() const;
+    void setPassword(const MyString &);
+    void setPassword(MyString &&);
+    const MyString &getPassword() const noexcept;
 
     void setMoneyAvailable(double) noexcept;
     double getMoneyAvailable() const noexcept;
@@ -30,7 +31,7 @@ public:
     void removeOrder();
     bool hasOrder() const noexcept;
     // void logout();
-    void deleteAccount(const MyVector<MyString> &, const MyVector<MyString> &, int *);
+    // void deleteAccount(const MyVector<MyString> &, const MyVector<MyString> &, int *);
 
     friend std::ostream &operator<<(std::ostream &, const User &);
 

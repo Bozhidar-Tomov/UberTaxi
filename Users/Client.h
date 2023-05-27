@@ -8,7 +8,7 @@ class Client : public User
 public:
     Client() = default;
     Client(const MyString &, const MyString &, double);
-    Client(const char *, const char *, double);
+    Client(MyString &&, MyString &&, double);
 
     void order();
     void checkOrder();

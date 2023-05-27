@@ -1,34 +1,36 @@
 #include "User.h"
 #include <iostream>
 
-User::User(const MyString &userName, const MyString &password, double moneyAvailable) : _name(userName), _password(password), _moneyAvailable(moneyAvailable)
+User::User(const MyString &userName, const MyString &password, double moneyAvailable)
+    : _name(userName), _password(password), _moneyAvailable(moneyAvailable) {}
+
+User::User(MyString &&userName, MyString &&password, double moneyAvailable)
+    : _name(std::move(userName)), _password(std::move(password)), _moneyAvailable(moneyAvailable) {}
+
+void User::setName(const MyString &name)
 {
+    _name = name;
+}
+void User::setName(MyString &&name)
+{
+    _name = std::move(name);
 }
 
-User::User(const char *userName, const char *password, double moneyAvailable) : _name(userName), _password(password), _moneyAvailable(moneyAvailable)
-{
-}
-
-User::User(MyString &&userName, MyString &&password, double moneyAvailable) : _name(std::move(userName)), _password(std::move(password)), _moneyAvailable(moneyAvailable)
-{
-}
-
-void User::setName(const char *name)
-{
-    _name.reset_data();
-    _name.append(name);
-}
-const MyString &User::getName() const
+const MyString &User::getName() const noexcept
 {
     return _name;
 }
-void User::setPassword(const char *password)
+
+void User::setPassword(const MyString &password)
 {
-    _password.reset_data();
-    _password.append(password);
+    _password = password;
+}
+void User::setPassword(MyString &&password)
+{
+    _password = std::move(password);
 }
 
-const MyString &User::getPassword() const
+const MyString &User::getPassword() const noexcept
 {
     return _password;
 }

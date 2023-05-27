@@ -186,7 +186,7 @@ User const *System::registerClient(const char *name, const char *password, doubl
     if (!validateUsername(name) || !validatePassword(password))
         return nullptr;
 
-    clients.push_back(std::move(Client(name, password, moneyAvailable)));
+    clients.push_back(std::move(Client(MyString(name), MyString(password), moneyAvailable)));
     return &clients[clients.size() - 1];
 }
 
@@ -199,7 +199,7 @@ User const *System::registerDriver(const char *name, const char *password, const
     if (!validateUsername(name) || !validatePassword(password))
         return nullptr;
 
-    drivers.push_back(std::move(Driver(name, password, moneyAvailable, phoneNumber, plateNumber)));
+    drivers.push_back(std::move(Driver(MyString(name), MyString(password), moneyAvailable, MyString(phoneNumber), MyString(plateNumber))));
     return &drivers[drivers.size() - 1];
 }
 
@@ -208,10 +208,10 @@ Client System::parseLineClient(std::stringstream &stream, char *line)
     Client client;
 
     stream.getline(line, BUFF_SIZE, DELIM);
-    client.setName(line);
+    client.setName(MyString(line));
 
     stream.getline(line, BUFF_SIZE, DELIM);
-    client.setPassword(line);
+    client.setPassword(MyString(line));
 
     stream.getline(line, BUFF_SIZE, DELIM);
     client.setMoneyAvailable(strToDouble(line));
@@ -224,10 +224,10 @@ Driver System::parseLineDriver(std::stringstream &stream, char *line)
     Driver driver;
 
     stream.getline(line, BUFF_SIZE, DELIM);
-    driver.setName(line);
+    driver.setName(MyString(line));
 
     stream.getline(line, BUFF_SIZE, DELIM);
-    driver.setPassword(line);
+    driver.setPassword(MyString(line));
 
     stream.getline(line, BUFF_SIZE, DELIM);
     driver.setMoneyAvailable(strToDouble(line));

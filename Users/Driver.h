@@ -9,10 +9,11 @@ class Driver : public User
 
 public:
     Driver() = default;
-    Driver(const char *, const char *, double,
-           const char *, const char *);
     Driver(const MyString &, const MyString &, double,
            const MyString &, const MyString &);
+
+    Driver(MyString &&, MyString &&, double,
+           MyString &&, MyString &&) noexcept;
 
     void setPhoneNumber(const char *);
     void setPlateNumber(const char *);

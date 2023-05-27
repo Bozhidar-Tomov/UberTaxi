@@ -1,18 +1,14 @@
 #include "Driver.h"
 
-Driver::Driver(const char *userName, const char *password, double moneyAvailable,
-               const char *phoneNumber, const char *plateNumber)
-    : User(userName, password, moneyAvailable),
-      _phoneNumber(phoneNumber), _plateNumber(plateNumber)
-{
-}
-
-Driver::Driver(const MyString &userName, const MyString &password, double moneyAvailable,
+Driver::Driver(const MyString &name, const MyString &password, double moneyAvailable,
                const MyString &phoneNumber, const MyString &plateNumber)
-    : User(userName, password, moneyAvailable),
-      _phoneNumber(phoneNumber), _plateNumber(plateNumber)
-{
-}
+    : User(name, password, moneyAvailable),
+      _phoneNumber(phoneNumber), _plateNumber(plateNumber) {}
+
+Driver::Driver(MyString &&name, MyString &&password, double moneyAvailable,
+               MyString &&phoneNumber, MyString &&plateNumber) noexcept
+    : User(std::move(name), std::move(password), moneyAvailable),
+      _phoneNumber(std::move(phoneNumber)), _plateNumber(std::move(plateNumber)) {}
 
 void Driver::setPhoneNumber(const char *phoneNumber)
 {
