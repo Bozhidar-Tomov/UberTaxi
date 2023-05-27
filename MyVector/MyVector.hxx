@@ -1,43 +1,48 @@
 #pragma once
+#include "MyVector.h"
 
-static size_t closestPowerOfAwo(size_t n)
+namespace
 {
-    n--;
-    n |= n >> 1;
-    n |= n >> 2;
-    n |= n >> 4;
-    n |= n >> 8;
-    n |= n >> 16;
-    n |= n >> 32;
-    return n + 1;
+    size_t closestPowerOfTwo(size_t n)
+    {
+        --n;
+        n |= n >> 1;
+        n |= n >> 2;
+        n |= n >> 4;
+        n |= n >> 8;
+        n |= n >> 16;
+        n |= n >> 32;
+        return n + 1;
+    }
 }
 
-template <typename Type>
-MyVector<Type>::MyVector() : MyVector(DEFAULT_CAPACITY_VECTOR)
+template <typename T>
+inline MyVector<T>::MyVector()
+    : MyVector(VECTOR_DEFAULT_CAPACITY)
 {
 }
 
-template <typename Type>
-MyVector<Type>::MyVector(size_t capacity)
+template <typename T>
+inline MyVector<T>::MyVector(size_t capacity)
 {
-    _capacity = closestPowerOfAwo(capacity);
-    _data = new Type[_capacity];
+    _capacity = closestPowerOfTwo(capacity);
+    _data = (T *)(operator new[](_capacity * sizeof(T)));
 }
 
-template <typename Type>
-MyVector<Type>::MyVector(const MyVector &other)
+template <typename T>
+inline MyVector<T>::MyVector(const MyVector &other)
 {
     copyFrom(other);
 }
 
-template <typename Type>
-MyVector<Type>::MyVector(MyVector &&other) noexcept
+template <typename T>
+inline MyVector<T>::MyVector(MyVector &&other) noexcept
 {
     moveFrom(std::move(other));
 }
 
-template <typename Type>
-MyVector<Type> &MyVector<Type>::operator=(const MyVector<Type> &other)
+template <typename T>
+inline MyVector<T> &MyVector<T>::operator=(const MyVector<T> &other)
 {
     if (this != &other)
     {
@@ -47,89 +52,152 @@ MyVector<Type> &MyVector<Type>::operator=(const MyVector<Type> &other)
     return *this;
 }
 
-template <typename Type>
-MyVector<Type> &MyVector<Type>::operator=(MyVector<Type> &&other) noexcept
+template <typename T>
+inline MyVector<T> &MyVector<T>::operator=(MyVector<T> &&other) noexcept
 {
     if (this != &other)
     {
         free();
-        moveFrom(std::move(other));
+        moveFrom(other);
     }
     return *this;
 }
 
-template <typename Type>
-MyVector<Type>::~MyVector() noexcept
+template <typename T>
+inline MyVector<T>::~MyVector() noexcept
 {
     free();
 }
 
-template <typename Type>
-void MyVector<Type>::push_back(const Type &element)
+template <typename T>
+inline void MyVector<T>::push_back(const T &element)
 {
-    if (_size >= _capacity)
-    {
-        _capacity <<= 1;
-        resize();
-    }
+    if (_size == _capacity)
+        reserve();
 
-    _data[_size++] = element;
+    new (_data + _size) T(element);
+    ++_size;
 }
 
-template <typename Type>
-void MyVector<Type>::push_back(const Type &&element) noexcept
+template <typename T>
+inline void MyVector<T>::push_back(T &&element)
 {
-    if (_size >= _capacity)
-    {
-        _capacity <<= 1;
-        resize();
-    }
+    if (_size == _capacity)
+        reserve();
 
-    _data[_size++] = std::move(element);
+    new (_data + _size) T(std::move(element));
+    ++_size;
 }
 
-template <typename Type>
-void MyVector<Type>::pop_back()
+template <typename T>
+inline void MyVector<T>::push_at(const T &element, size_t idx)
 {
-    if (_size)
-    {
-        _data[--_size].~Type();
-    }
+    if (_size == _capacity)
+        reserve();
+
+    for (size_t i = _size; i > idx; --i)
+        new (_data + i) T(std::move(_data[i - 1]));
+
+    new (_data + idx) T(element);
+    ++_size;
 }
 
-template <typename Type>
-size_t MyVector<Type>::size() const noexcept
+template <typename T>
+inline void MyVector<T>::push_at(T &&element, size_t idx)
+{
+    if (_size == _capacity)
+        reserve();
+
+    for (size_t i = _size; i > idx; --i)
+        new (_data + i) T(std::move(_data[i - 1]));
+
+    new (_data + idx) T(std::move(element));
+    ++_size;
+}
+
+template <typename T>
+inline void MyVector<T>::pop_back()
+{
+    if (empty())
+        throw std::range_error("Container is empty");
+
+    _data[--_size].~T();
+}
+
+template <typename T>
+inline const T &MyVector<T>::back() const
+{
+    if (empty())
+        throw std::range_error("Container is empty");
+    return _data[_size - 1];
+}
+
+template <typename T>
+inline T &MyVector<T>::back()
+{
+    if (empty())
+        throw std::range_error("Container is empty");
+    return _data[_size - 1];
+}
+
+template <typename T>
+inline size_t MyVector<T>::size() const noexcept
 {
     return _size;
 }
 
-template <typename Type>
-size_t MyVector<Type>::capacity() const noexcept
+template <typename T>
+inline size_t MyVector<T>::capacity() const noexcept
 {
     return _capacity;
 }
 
-template <typename Type>
-bool MyVector<Type>::empty() const noexcept
+template <typename T>
+inline void MyVector<T>::resize(size_t newSize)
+{
+    if (newSize > _capacity)
+        reserve(newSize);
+
+    _size = newSize;
+}
+
+template <typename T>
+inline bool MyVector<T>::empty() const noexcept
 {
     return !_size;
 }
 
-// Element access:
-template <typename Type>
-Type &MyVector<Type>::operator[](size_t n)
+template <typename T>
+inline void MyVector<T>::clear() noexcept
+{
+    free();
+    _size = 0;
+    _capacity = VECTOR_DEFAULT_CAPACITY;
+    _data = (T *)(operator new[](_capacity * sizeof(T)));
+}
+
+template <typename T>
+inline void MyVector<T>::swap(size_t i, size_t j)
+{
+    T temp = at(i);
+    at(i) = at(j);
+    at(j) = temp;
+}
+
+template <typename T>
+inline T &MyVector<T>::operator[](size_t n)
 {
     return _data[n];
 }
 
-template <typename Type>
-const Type &MyVector<Type>::operator[](size_t n) const
+template <typename T>
+inline const T &MyVector<T>::operator[](size_t n) const
 {
     return _data[n];
 }
 
-template <typename Type>
-Type &MyVector<Type>::at(size_t n)
+template <typename T>
+inline T &MyVector<T>::at(size_t n)
 {
     if (n >= _size)
         throw std::out_of_range("Index out of range.");
@@ -137,8 +205,8 @@ Type &MyVector<Type>::at(size_t n)
     return _data[n];
 }
 
-template <typename Type>
-const Type &MyVector<Type>::at(size_t n) const
+template <typename T>
+inline const T &MyVector<T>::at(size_t n) const
 {
     if (n >= _size)
         throw std::out_of_range("Index out of range.");
@@ -146,36 +214,55 @@ const Type &MyVector<Type>::at(size_t n) const
     return _data[n];
 }
 
-template <typename Type>
-void MyVector<Type>::free() noexcept
+template <typename T>
+inline T *MyVector<T>::data() const noexcept
 {
-    delete[] _data;
+    return _data;
 }
 
-template <typename Type>
-void MyVector<Type>::copyFrom(const MyVector &other)
+template <typename T>
+inline T *MyVector<T>::operator*() const noexcept
 {
-    copyData(other._data);
+    return _data;
+}
+
+template <typename T>
+inline std::ostream &operator<<(std::ostream &out, const MyVector<T> &obj)
+{
+    out << '[';
+    for (size_t i = 0; i < obj._size; ++i)
+    {
+        out << obj._data[i];
+        if (i != obj._size - 1)
+            out << ", ";
+    }
+    out << ']';
+    return out;
+}
+
+template <typename T>
+inline void MyVector<T>::free() noexcept
+{
+    for (size_t i = 0; i < _size; ++i)
+        _data[i].~T();
+
+    operator delete[](_data);
+    _data = nullptr;
+}
+
+template <typename T>
+inline void MyVector<T>::copyFrom(const MyVector &other)
+{
+    _data = (T *)(operator new[](other._capacity * sizeof(T)));
+    for (size_t i = 0; i < other._size; ++i)
+        new (_data + i) T(other._data[i]);
+
     _size = other._size;
     _capacity = other._capacity;
 }
 
-template <typename Type>
-void MyVector<Type>::copyData(const Type *otherData)
-{
-    if (!_data || !otherData)
-        return;
-
-    _data = new Type[_capacity];
-
-    for (size_t i = 0; i < _size; ++i)
-    {
-        _data[i] = otherData[i];
-    }
-}
-
-template <typename Type>
-void MyVector<Type>::moveFrom(MyVector &&other) noexcept
+template <typename T>
+inline void MyVector<T>::moveFrom(MyVector &&other) noexcept
 {
     _data = other._data;
     other._data = nullptr;
@@ -187,15 +274,25 @@ void MyVector<Type>::moveFrom(MyVector &&other) noexcept
     other._capacity = 0;
 }
 
-template <typename Type>
-void MyVector<Type>::resize()
+template <typename T>
+inline void MyVector<T>::reserve(size_t newCapacity)
 {
-    Type *temp = _data;
+    if (!newCapacity)
+        _capacity *= 2;
+    else
+        closestPowerOfTwo(newCapacity);
 
-    _data = new Type[_capacity];
+    T *newData = (T *)(operator new[](_capacity * sizeof(T)));
 
     for (size_t i = 0; i < _size; ++i)
-        _data[i] = temp[i];
+    {
+        // move each object from the old array to the new one
+        new (newData + i) T(std::move(_data[i]));
 
-    delete[] temp;
+        // delete each object from the old array by calling the destructor
+        _data[i].~T();
+    }
+
+    operator delete[](_data);
+    _data = newData;
 }

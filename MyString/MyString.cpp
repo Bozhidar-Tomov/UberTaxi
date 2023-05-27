@@ -1,13 +1,15 @@
 #include "MyString.h"
 #include "Utils.h"
+#include <iostream>
 
-// Big 4
+// Big 6
 MyString::MyString() : MyString(nullptr) {}
 
 MyString::MyString(const char *data)
 {
     if (!data)
     {
+
         _data = new char[_capacity];
         return;
     }
@@ -16,7 +18,6 @@ MyString::MyString(const char *data)
     _size = size;
 
     manageCapacity(size, false, false);
-
     _data = new char[_capacity];
     myStrCpy(_data, data);
 }
@@ -52,7 +53,7 @@ MyString &MyString::operator=(MyString &&other) noexcept
     return *this;
 }
 
-MyString::~MyString()
+MyString::~MyString() noexcept
 {
     free();
 }
@@ -62,7 +63,7 @@ char *MyString::operator*() const noexcept
     return _data;
 }
 
-// Big 4 helper functions
+// Big 6 helper functions
 void MyString::manageCapacity(size_t size, bool shouldCopy, bool shouldResize)
 {
     if (size >= _capacity)
@@ -157,7 +158,8 @@ void MyString::reserve(size_t len)
 
 void MyString::clear()
 {
-    resizeUtil(_data, DEFAULT_CAPACITY, false);
+    free();
+    _data = new char[DEFAULT_CAPACITY];
 
     _capacity = DEFAULT_CAPACITY;
     _data[0] = '\0';
@@ -338,63 +340,29 @@ const char *MyString::c_str() const noexcept
     return _data;
 }
 
-size_t MyString::find_first_of(char ch, size_t pos) const noexcept
+int32_t MyString::find_first_of(char ch, size_t pos) const noexcept
 {
     for (size_t i = pos; i < _size; ++i)
-    {
         if (_data[i] == ch)
-        {
-            return i;
-        }
-    }
+            return int32_t(i);
 
     return -1;
 }
 
-size_t MyString::find_last_of(char ch, size_t pos) const noexcept
+int32_t MyString::find_last_of(char ch, size_t pos) const noexcept
 {
     if (pos == SIZE_MAX)
-    {
         pos = _size - 1;
-    }
 
-    for (size_t i = pos; i >= 0; --i)
-    {
+    for (size_t i = pos; i > 0; --i)
         if (_data[i] == ch)
-        {
-            return i;
-        }
-    }
+            return int32_t(i);
+
+    if (_data[0] == ch)
+        return 0;
+
     return -1;
 }
-
-// MyString MyString::substr(size_t start, size_t len) const
-// {
-//     if (start > _size || len == 0)
-//     {
-//         throw std::invalid_argument("Indexes out of range.");
-//     }
-
-//     MyString temp;
-
-//     if (start == _size)
-//     {
-//         return temp;
-//     }
-
-//     temp.reserve(len);
-
-//     for (size_t i = 0; i < len; ++i)
-//     {
-//         if (start + i > _size)
-//         {
-//             break;
-//         }
-//         temp.push_back(at(start + i));
-//     }
-
-//     return temp;
-// }
 
 MyString MyString::substr(size_t start, size_t len) const
 {
@@ -417,17 +385,17 @@ MyString MyString::substr(size_t start, size_t len) const
     return temp;
 }
 
-size_t MyString::compare(const MyString &other) const
+int8_t MyString::compare(const MyString &other) const
 {
     return compare(other._data);
 }
 
-size_t MyString::compare(const char *data) const
+int8_t MyString::compare(const char *data) const
 {
     if (!data)
         throw std::invalid_argument("Empty String Exception (nullptr).");
 
-    return myStrCmp(_data, data);
+    return (int8_t)(myStrCmp(_data, data));
 }
 
 // Operators:
@@ -490,7 +458,7 @@ bool operator>(const MyString &lhs, const MyString &rhs)
 
 bool operator>(const char *lhs, const MyString &rhs)
 {
-    return rhs.compare(rhs) < 0;
+    return rhs.compare(lhs) < 0;
 }
 
 bool operator>=(const MyString &lhs, const MyString &rhs)

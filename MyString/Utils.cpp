@@ -16,7 +16,7 @@ void myStrCpy(char *destination, const char *source, size_t startIdx)
     destination[startIdx] = '\0';
 }
 
-int myStrLen(const char *str)
+int64_t myStrLen(const char *str)
 {
     const char *s = str;
 
@@ -28,7 +28,7 @@ int myStrLen(const char *str)
     return (s - str);
 }
 
-void resizeUtil(char *&data, int capacity, bool shouldCopy)
+void resizeUtil(char *&data, size_t capacity, bool shouldCopy)
 {
     char *newData = new char[capacity];
 
@@ -42,7 +42,7 @@ void resizeUtil(char *&data, int capacity, bool shouldCopy)
     data = newData;
 }
 
-int myStrCmp(const char *s1, const char *s2)
+int16_t myStrCmp(const char *s1, const char *s2)
 {
     if (!s1 || !s2)
     {

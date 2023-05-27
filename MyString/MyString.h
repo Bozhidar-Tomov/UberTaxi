@@ -1,7 +1,10 @@
 #pragma once
 #include <ostream>
 
-static const size_t DEFAULT_CAPACITY = 8;
+namespace
+{
+    const size_t DEFAULT_CAPACITY = 8;
+};
 
 class MyString
 {
@@ -67,12 +70,12 @@ public:
 
     // String operations:
     const char *c_str() const noexcept;
-    size_t find_first_of(char, size_t = 0) const noexcept;
-    size_t find_last_of(char, size_t = SIZE_MAX) const noexcept;
+    int32_t find_first_of(char, size_t = 0) const noexcept;
+    int32_t find_last_of(char, size_t = SIZE_MAX) const noexcept;
     MyString substr(size_t, size_t) const;
 
-    size_t compare(const MyString &) const;
-    size_t compare(const char *) const;
+    int8_t compare(const MyString &) const;
+    int8_t compare(const char *) const;
 
 private:
     // Big 6 helper functions

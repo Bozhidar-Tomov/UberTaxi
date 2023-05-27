@@ -1,17 +1,24 @@
 #pragma once
+#include <ostream>
 #include <stddef.h>  // including std::size_t
-#include <utility>   // includeing std::move
-#include <stdexcept> // includeing std::excepton
+#include <utility>   // including std::move
+#include <stdexcept> // including std::excepton
 
-static const size_t DEFAULT_CAPACITY_VECTOR = 8;
+namespace
+{
+    const size_t VECTOR_DEFAULT_CAPACITY = 8;
+}
 
-// TODO: maybe use pointer array instead of Type object array to avoid unnecessary constructor calls
-template <typename Type>
+/*
+This implementation of this template class container 'MyVector' uses placement new.
+Aka. 'operator new[]()' and 'operator delete[]()'
+*/
+template <typename T>
 class MyVector
 {
-    Type *_data = nullptr;
+    T *_data = nullptr;
     size_t _size = 0;
-    size_t _capacity = DEFAULT_CAPACITY_VECTOR;
+    size_t _capacity = VECTOR_DEFAULT_CAPACITY;
 
 public:
     MyVector();
@@ -26,28 +33,43 @@ public:
     ~MyVector() noexcept;
 
 public:
-    void push_back(const Type &);
-    void push_back(const Type &&) noexcept;
-    void pop_back();
+    void push_back(const T &);
+    void push_back(T &&);
 
+    void push_at(const T &, size_t);
+    void push_at(T &&, size_t);
+
+    void pop_back();
+    const T &back() const;
+    T &back();
+
+    // Capacity:
     size_t size() const noexcept;
     size_t capacity() const noexcept;
+    void resize(size_t);
     bool empty() const noexcept;
+    void clear() noexcept;
+    void swap(size_t, size_t);
 
     // Element access:
-    Type &operator[](size_t);
-    const Type &operator[](size_t) const;
+    T &operator[](size_t);
+    const T &operator[](size_t) const;
 
-    Type &at(size_t);
-    const Type &at(size_t) const;
+    T &at(size_t);
+    const T &at(size_t) const;
+
+    T *data() const noexcept;
+    T *operator*() const noexcept;
+
+    template <typename U>
+    friend std::ostream &operator<<(std::ostream &, const MyVector<U> &);
 
 private:
     void free() noexcept;
     void copyFrom(const MyVector &);
-    void copyData(const Type *);
     void moveFrom(MyVector &&) noexcept;
 
-    void resize();
+    void reserve(size_t = 0);
 };
 
 #include "MyVector.hxx"
