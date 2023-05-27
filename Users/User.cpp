@@ -43,7 +43,7 @@ double User::getMoneyAvailable() const noexcept
     return _moneyAvailable;
 }
 
-void User::addOrder(Order const *order)
+void User::addOrder(Order *order)
 {
     _currentOrder = order;
 }
@@ -53,7 +53,7 @@ void User::removeOrder()
     _currentOrder = nullptr;
 }
 
-bool User::hasOrder() const
+bool User::hasOrder() const noexcept
 {
     return _currentOrder;
 }

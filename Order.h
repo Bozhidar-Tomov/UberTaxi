@@ -1,22 +1,24 @@
 #pragma once
-#include "MyString/MyString.h"
 #include "Users/Client.h"
 #include "Users/Driver.h"
+#include "./Address.h"
 
 class Order
 {
-    MyString _address;
-    MyString _dest;
+    Address _address;
+    Address _dest;
 
-    const Client *_client = nullptr;
-    const Driver *_driver = nullptr;
+    Client const &_client;
+    Driver const &_driver;
 
-    double cost = 0;
+    double _cost = 0;
+    uint8_t _passengerCount = 0;
 
 public:
-    Order() = default;
-    Order(const char *, const char *, const Client *, const Driver *);
-    Order(const MyString &, const MyString &, const Client *, const Driver *);
+    Order(Address &, const Address &, Client const &, Driver const &, double, uint8_t);
+    Order(Address &&, Address &&, Client const &, Driver const &, double, uint8_t);
+    ~Order() noexcept = default;
 
-    void changeAddress(const char *);
+    void changeAddress(const Address &);
+    void changeAddress(Address &&) noexcept;
 };

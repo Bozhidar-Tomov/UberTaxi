@@ -8,7 +8,7 @@ class User
 {
     MyString _name;
     MyString _password;
-    Order const *_currentOrder = nullptr;
+    Order *_currentOrder = nullptr;
     double _moneyAvailable = 0;
 
 public:
@@ -26,9 +26,9 @@ public:
     void setMoneyAvailable(double) noexcept;
     double getMoneyAvailable() const noexcept;
 
-    void addOrder(Order const *);
+    void addOrder(Order *);
     void removeOrder();
-    bool hasOrder() const;
+    bool hasOrder() const noexcept;
     // void logout();
     void deleteAccount(const MyVector<MyString> &, const MyVector<MyString> &, int *);
 
