@@ -399,9 +399,22 @@ int8_t MyString::compare(const char *data) const
 }
 
 // Operators:
-std::ostream &operator<<(std::ostream &out, const MyString &obj) noexcept
+std::ostream &operator<<(std::ostream &out, const MyString &obj)
 {
-    return out << obj.c_str();
+    return out << obj._data;
+}
+
+std::istream &operator>>(std::istream &in, MyString &obj)
+{
+    char buffer[1024];
+    in >> buffer;
+
+    size_t len = myStrLen(buffer);
+
+    obj.manageCapacity(len, true);
+    myStrCpy(obj._data, buffer);
+
+    return in;
 }
 
 MyString operator+(const MyString &lhs, const MyString &rhs)

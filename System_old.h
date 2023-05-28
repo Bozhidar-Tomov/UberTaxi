@@ -2,6 +2,7 @@
 #include "MyVector/MyVector.h"
 #include "Users/Client.h"
 #include "Users/Driver.h"
+#include <sstream>
 
 enum UserType
 {
@@ -9,7 +10,6 @@ enum UserType
     driver,
 };
 
-// TODO: Make it singleton
 class System
 {
     MyVector<Client> clients;

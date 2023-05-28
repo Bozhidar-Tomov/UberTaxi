@@ -1,5 +1,6 @@
 #pragma once
 #include <ostream>
+#include <istream>
 
 namespace
 {
@@ -77,6 +78,9 @@ public:
     int8_t compare(const MyString &) const;
     int8_t compare(const char *) const;
 
+    friend std::ostream &operator<<(std::ostream &, const MyString &);
+    friend std::istream &operator>>(std::istream &, MyString &);
+
 private:
     // Big 6 helper functions
     void manageCapacity(size_t, bool, bool = true);
@@ -86,8 +90,6 @@ private:
     void copyData(const char *);
     void moveFrom(MyString &&) noexcept;
 };
-
-std::ostream &operator<<(std::ostream &, const MyString &) noexcept;
 
 MyString operator+(const MyString &, const MyString &);
 

@@ -2,6 +2,7 @@
 #include "../MyString/MyString.h"
 #include "../MyVector/MyVector.h"
 #include <ostream>
+#include <istream>
 
 // TODO: Fix alignment of all classes
 class Order;
@@ -35,6 +36,7 @@ public:
     // void deleteAccount(const MyVector<MyString> &, const MyVector<MyString> &, int *);
 
     friend std::ostream &operator<<(std::ostream &, const User &);
+    friend std::istream &operator>>(std::istream &, User &);
 
 private:
     bool validateUsername(const char *) const;

@@ -90,3 +90,10 @@ std::ostream &operator<<(std::ostream &out, const User &obj)
 {
     return out << obj._name << "|" << obj._password << "|" << obj._moneyAvailable;
 }
+
+std::istream &operator>>(std::istream &in, User &obj)
+{
+    // TODO: reading from file logic should be here.
+    // as parse<user>Line
+    return in >> obj._name >> obj._password >> obj._moneyAvailable;
+}
