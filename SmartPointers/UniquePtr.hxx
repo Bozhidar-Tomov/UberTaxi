@@ -22,6 +22,7 @@ public:
     explicit operator bool();
     T &operator*() const noexcept;
     T *operator->() const noexcept;
+    T *get() const noexcept;
 };
 
 template <typename T>
@@ -77,6 +78,12 @@ inline T &UniquePtr<T>::operator*() const noexcept
 
 template <typename T>
 inline T *UniquePtr<T>::operator->() const noexcept
+{
+    return _ptr;
+}
+
+template <typename T>
+inline T *UniquePtr<T>::get() const noexcept
 {
     return _ptr;
 }

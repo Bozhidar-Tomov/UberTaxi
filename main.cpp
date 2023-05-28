@@ -4,8 +4,18 @@
 #include "Users/Client.h"
 #include "System.h"
 #include "Address.h"
+#include "SmartPointers/SharedPtr.hxx"
 
 int main()
 {
-    Address p(MyString("addr"), MyString("info"), 3, 5);
+    {
+        SharedPtr<int> r;
+        int *i = new int(6);
+        r.reset(i);
+
+        SharedPtr<int> a = std::move(r);
+        SharedPtr<int> s(nullptr);
+
+        s.swap(r);
+    }
 }
