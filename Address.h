@@ -9,6 +9,7 @@ class Address
         double _x = 0;
         double _y = 0;
 
+        Point() = default;
         Point(double x, double y) : _x(x), _y(y) {}
 
         double getDist(const Point &other) const noexcept
@@ -25,8 +26,9 @@ class Address
     Point _coordinates;
 
 public:
-    Address(const MyString &, const MyString &, double, double);
-    Address(MyString &&, MyString &&, double, double) noexcept;
+    Address() = default;
+    Address(const MyString &, double, double, const MyString & = MyString(""));
+    Address(MyString &&, double, double, const MyString && = MyString("")) noexcept;
     ~Address() = default;
 
     double getDist(const Address &) const noexcept;

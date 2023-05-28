@@ -3,6 +3,7 @@
 #include "../MyVector/MyVector.h"
 #include <ostream>
 
+// TODO: Fix alignment of all classes
 class Order;
 class User
 {

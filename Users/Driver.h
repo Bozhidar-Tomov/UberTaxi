@@ -1,24 +1,28 @@
 #pragma once
 #include "../MyString/MyString.h"
+#include "../Address.h"
 #include "User.h"
 
 class Driver : public User
 {
+    Address _currAddress;
     MyString _phoneNumber;
     MyString _plateNumber;
 
 public:
     Driver() = default;
     Driver(const MyString &, const MyString &, double,
-           const MyString &, const MyString &);
+           const Address &, const MyString &, const MyString &);
 
     Driver(MyString &&, MyString &&, double,
-           MyString &&, MyString &&) noexcept;
+           Address &&, MyString &&, MyString &&) noexcept;
 
     void setPhoneNumber(const char *);
     void setPlateNumber(const char *);
 
-    void changeAddress();
+    void changeCurrAddress(const Address &);
+    void changeCurrAddress(Address &&) noexcept;
+
     void checkAvailableOrders();
     void acceptOrder();
     void declineOrder();

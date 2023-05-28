@@ -1,20 +1,15 @@
 #include "Order.h"
 
-Order::Order(Address &address, const Address &dest, Client const &client, Driver const &driver, double cost, uint8_t passengerCount)
-    : _address(address), _dest(dest),
-      _client(client), _driver(driver),
-      _cost(cost), _passengerCount(passengerCount) {}
+Order::Order(const Address &address, const Address &dest,
+             const MyVector<Client const *> &clients, Driver const *driver,
+             size_t id, double cost, uint8_t passengerCount)
+    : _pickupAddress(address), _destAddress(dest),
+      _clients(clients), _driver(driver),
+      _id(id), _cost(cost), _passengerCount(passengerCount) {}
 
-Order::Order(Address &&address, Address &&dest, Client const &client, Driver const &driver, double cost, uint8_t passengerCount)
-    : _address(std::move(address)), _dest(std::move(dest)),
-      _client(client), _driver(driver),
-      _cost(cost), _passengerCount(passengerCount) {}
-
-void Order::changeAddress(const Address &newAddress)
-{
-    _address = newAddress;
-}
-void Order::changeAddress(Address &&newAddress) noexcept
-{
-    _address = std::move(newAddress);
-}
+Order::Order(Address &&address, Address &&dest,
+             MyVector<Client const *> &&clients, Driver const *driver,
+             size_t id, double cost, uint8_t passengerCount)
+    : _pickupAddress(std::move(address)), _destAddress(std::move(dest)),
+      _clients(std::move(clients)), _driver(driver),
+      _id(id), _cost(cost), _passengerCount(passengerCount) {}

@@ -16,6 +16,7 @@ class System
 public:
     MyVector<Client> clients;
     MyVector<Driver> drivers;
+    MyVector<Order> orders;
     MyVector<MyString> passwordsClients;
     MyVector<MyString> passwordsDrivers;
 

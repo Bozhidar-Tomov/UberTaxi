@@ -9,13 +9,9 @@
 int main()
 {
     {
-        SharedPtr<int> r;
-        int *i = new int(6);
-        r.reset(i);
-
-        SharedPtr<int> a = std::move(r);
-        SharedPtr<int> s(nullptr);
-
-        s.swap(r);
+        std::cout << "Address:" << sizeof(Address) << '\n';
+        std::cout << "MyVector:" << sizeof(MyVector<Client *>) << '\n';
+        std::cout << "Client:" << sizeof(Client) << '\n';
+        std::cout << "Driver:" << sizeof(Driver) << '\n';
     }
 }

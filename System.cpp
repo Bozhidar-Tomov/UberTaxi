@@ -199,7 +199,7 @@ User const *System::registerDriver(const char *name, const char *password, const
     if (!validateUsername(name) || !validatePassword(password))
         return nullptr;
 
-    drivers.push_back(std::move(Driver(MyString(name), MyString(password), moneyAvailable, MyString(phoneNumber), MyString(plateNumber))));
+    // drivers.push_back(std::move(Driver(MyString(name), MyString(password), moneyAvailable, MyString(phoneNumber), MyString(plateNumber))));
     return &drivers[drivers.size() - 1];
 }
 

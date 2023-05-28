@@ -1,24 +1,27 @@
 #pragma once
 #include "Users/Client.h"
 #include "Users/Driver.h"
+#include "MyVector/MyVector.h"
 #include "./Address.h"
 
 class Order
 {
-    Address _address;
-    Address _dest;
+    Address _pickupAddress;
+    Address _destAddress;
 
-    Client const &_client;
-    Driver const &_driver;
+    MyVector<Client const *> _clients;
+    Driver const *_driver;
 
+    size_t _id = 0;
     double _cost = 0;
     uint8_t _passengerCount = 0;
 
 public:
-    Order(Address &, const Address &, Client const &, Driver const &, double, uint8_t);
-    Order(Address &&, Address &&, Client const &, Driver const &, double, uint8_t);
+    Order(const Address &, const Address &,
+          const MyVector<Client const *> &, Driver const *,
+          size_t, double, uint8_t);
+    Order(Address &&, Address &&,
+          MyVector<Client const *> &&, Driver const *,
+          size_t, double, uint8_t);
     ~Order() noexcept = default;
-
-    void changeAddress(const Address &);
-    void changeAddress(Address &&) noexcept;
 };
