@@ -1,16 +1,18 @@
 #pragma once
-#include "Users/Client.h"
-#include "Users/Driver.h"
 #include "MyVector/MyVector.h"
 #include "./Address.h"
+#include "IdGenerator.h"
+
+class Driver;
+class Client;
 
 class Order
 {
     Address _pickupAddress;
     Address _destAddress;
 
-    MyVector<Client const *> _clients;
-    Driver const *_driver;
+    MyVector<Client *> _clients;
+    Driver *_driver;
 
     size_t _id = 0;
     double _cost = 0;
@@ -18,10 +20,10 @@ class Order
 
 public:
     Order(const Address &, const Address &,
-          const MyVector<Client const *> &, Driver const *,
-          size_t, double, uint8_t);
+          const MyVector<Client *> &, Driver *,
+          uint8_t);
     Order(Address &&, Address &&,
-          MyVector<Client const *> &&, Driver const *,
-          size_t, double, uint8_t);
+          MyVector<Client *> &&, Driver *,
+          uint8_t);
     ~Order() noexcept = default;
 };

@@ -1,4 +1,5 @@
 #include "Driver.h"
+#include "../constants.h"
 
 Driver::Driver(const MyString &name, const MyString &password, double moneyAvailable,
                const Address &address, const MyString &phoneNumber, const MyString &plateNumber)
@@ -30,7 +31,27 @@ void Driver::changeCurrAddress(Address &&currAddress) noexcept
     _currAddress = std::move(currAddress);
 }
 
-std::ostream &operator<<(std::ostream &out, const Driver &obj)
+const Address &Driver::getAddress() const
 {
-    return out << (const User &)obj << "|" << obj._phoneNumber << "|" << obj._plateNumber;
+    return _currAddress;
+}
+
+std::ostream &
+operator<<(std::ostream &out, const Driver &obj)
+{
+    return out << (const User &)obj << DELIM << obj._phoneNumber << DELIM << obj._plateNumber;
+}
+
+std::istream &operator>>(std::istream &in, Driver &obj)
+{
+    in >> (User &)(obj);
+    char buff[BUFF_SIZE];
+
+    in.getline(buff, BUFF_SIZE, DELIM);
+    obj.setPhoneNumber(buff);
+
+    in.getline(buff, BUFF_SIZE, DELIM);
+    obj.setPlateNumber(buff);
+
+    return in;
 }

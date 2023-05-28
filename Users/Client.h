@@ -1,16 +1,17 @@
 #pragma once
 #include "../MyString/MyString.h"
 #include "User.h"
+#include "../Address.h"
 
 class Client : public User
 {
 
 public:
     Client() = default;
-    Client(const MyString &, const MyString &, double);
+    // Client(const MyString &, const MyString &, double);
     Client(MyString &&, MyString &&, double);
 
-    void order();
+    void order(Address &&, Address &&, uint8_t);
     void checkOrder();
     void cancelOrder();
     void payOrder();
@@ -18,4 +19,5 @@ public:
     void addMoney();
 
     friend std::ostream &operator<<(std::ostream &, const Client &);
+    friend std::istream &operator>>(std::istream &, Client &);
 };

@@ -1,17 +1,20 @@
 #pragma once
-#include "../MyString/MyString.h"
-#include "../MyVector/MyVector.h"
 #include <ostream>
 #include <istream>
+#include "../MyString/MyString.h"
+#include "../MyVector/MyVector.h"
+#include "../Order.h"
 
+class System;
 // TODO: Fix alignment of all classes
-class Order;
 class User
 {
+protected:
     MyString _name;
     MyString _password;
     Order *_currentOrder = nullptr;
     double _moneyAvailable = 0;
+    System *_sys = nullptr;
 
 public:
     User() = default;

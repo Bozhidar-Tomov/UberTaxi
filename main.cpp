@@ -8,10 +8,16 @@
 
 int main()
 {
-    {
-        std::cout << "Address:" << sizeof(Address) << '\n';
-        std::cout << "MyVector:" << sizeof(MyVector<Client *>) << '\n';
-        std::cout << "Client:" << sizeof(Client) << '\n';
-        std::cout << "Driver:" << sizeof(Driver) << '\n';
-    }
+    System sys;
+
+    sys.loadData();
+
+    // for (int i = 0; i < sys.clients.size(); ++i)
+    // {
+    //     std::cout << sys.clients[i] << '\n';
+    // }
+
+    sys.registerClient("John Doe", "Pyja12s#s{}", 0);
+
+    // (Client *)sys.clients.at(sys.drivers.size() - 1).order();
 }

@@ -2,6 +2,7 @@
 #include "MyVector/MyVector.h"
 #include "Users/Client.h"
 #include "Users/Driver.h"
+#include "Order.h"
 
 enum UserType
 {
@@ -12,6 +13,8 @@ enum UserType
 // TODO: Make it singleton
 class System
 {
+    // TODO: should be private
+public:
     MyVector<Client> clients;
     MyVector<Driver> drivers;
     MyVector<Order> orders;
@@ -19,6 +22,9 @@ class System
 public:
     void loadData();
     void saveData();
+
+    const Driver *getClosestDriver(const Address &) const;
+    void notifyDrivers() const;
 
     User const *loginUser(const char *username, const char *password, const UserType userType);
     User const *registerClient(const char *username, const char *password, double moneyAvailable = 0);

@@ -8,6 +8,7 @@ class Driver : public User
     Address _currAddress;
     MyString _phoneNumber;
     MyString _plateNumber;
+    Order *_upcomingOrder = nullptr;
 
 public:
     Driver() = default;
@@ -23,6 +24,8 @@ public:
     void changeCurrAddress(const Address &);
     void changeCurrAddress(Address &&) noexcept;
 
+    const Address &getAddress() const;
+
     void checkAvailableOrders();
     void acceptOrder();
     void declineOrder();
@@ -30,4 +33,5 @@ public:
     void acceptPayment();
 
     friend std::ostream &operator<<(std::ostream &, const Driver &);
+    friend std::istream &operator>>(std::istream &, Driver &);
 };
