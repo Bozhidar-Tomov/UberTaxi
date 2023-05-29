@@ -8,16 +8,14 @@
 
 int main()
 {
-    System sys;
+    // System sys;
 
-    sys.loadData();
+    // sys.loadData();
 
     // for (int i = 0; i < sys.clients.size(); ++i)
     // {
     //     std::cout << sys.clients[i] << '\n';
     // }
-
-    sys.registerClient("John Doe", "Pyja12s#s{}", 0);
 
     // (Client *)sys.clients.at(sys.drivers.size() - 1).order();
 }
