@@ -2,6 +2,7 @@
 #include "MyVector/MyVector.h"
 #include "./Address.h"
 #include "IdGenerator.h"
+#include <ostream>
 
 class Driver;
 class Client;
@@ -26,4 +27,8 @@ public:
           MyVector<Client *> &&, Driver *,
           uint8_t);
     ~Order() noexcept = default;
+
+    const Address &getPickupAddress() const noexcept;
+
+    friend std::ostream &operator<<(std::ostream &, const Order &);
 };

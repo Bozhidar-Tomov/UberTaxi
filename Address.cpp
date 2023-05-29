@@ -10,3 +10,8 @@ double Address::getDist(const Address &other) const noexcept
 {
     return _coordinates.getDist(other._coordinates);
 }
+
+std::ostream &operator<<(std::ostream &out, const Address &obj)
+{
+    return out << "Name: " << obj._name << ", Description: " << obj._description;
+}

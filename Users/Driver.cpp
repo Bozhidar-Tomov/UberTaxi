@@ -1,5 +1,9 @@
 #include "Driver.h"
 #include "../constants.h"
+#include "../System.h"
+#include "../PriorityQueue/PriorityQueue.h"
+#include <float.h> // including DBL_MAX
+#include <iostream>
 
 Driver::Driver(const MyString &name, const MyString &password, double moneyAvailable,
                const Address &address, const MyString &phoneNumber, const MyString &plateNumber)
@@ -34,6 +38,22 @@ void Driver::changeCurrAddress(Address &&currAddress) noexcept
 const Address &Driver::getAddress() const
 {
     return _currAddress;
+}
+
+void Driver::checkAvailableOrders()
+{
+    PriorityQueue<SharedPtr<Order>> pq(DBL_MAX);
+
+    for (size_t i = 0; i < _sys->pendingOrders.size(); ++i)
+    {
+        pq.push(_sys->pendingOrders[i], _currAddress.getDist(_sys->pendingOrders[i].get()->getPickupAddress()));
+    }
+
+    while (!pq.empty())
+    {
+        std::cout << *pq.peek() << '\n';
+        pq.pop();
+    }
 }
 
 std::ostream &

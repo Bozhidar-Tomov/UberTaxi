@@ -32,4 +32,6 @@ public:
     ~Address() = default;
 
     double getDist(const Address &) const noexcept;
+
+    friend std::ostream &operator<<(std::ostream &, const Address &);
 };

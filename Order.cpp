@@ -13,3 +13,16 @@ Order::Order(Address &&address, Address &&dest,
     : _pickupAddress(std::move(address)), _destAddress(std::move(dest)),
       _clients(std::move(clients)), _driver(driver),
       _passengerCount(passengerCount), _id(IdGenerator::getId()) {}
+
+const Address &Order::getPickupAddress() const noexcept
+{
+  return _pickupAddress;
+}
+
+std::ostream &operator<<(std::ostream &out, const Order &obj)
+{
+  return out << "ID: " << obj._id << '\n'
+             << "Pickup address: " << obj._pickupAddress << '\n'
+             << "Destination: " << obj._destAddress << '\n'
+             << "Number of passengers: " << obj._passengerCount;
+}
