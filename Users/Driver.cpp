@@ -57,8 +57,19 @@ void Driver::checkAvailableOrders()
     }
 }
 
-std::ostream &
-operator<<(std::ostream &out, const Driver &obj)
+void Driver::acceptOrder(size_t id, unsigned short minutes)
+{
+    for (size_t i = 0; i < _sys->pendingOrders.size(); ++i)
+    {
+        if (_sys->pendingOrders[i].get()->getID() != id)
+            continue;
+
+        _sys->pendingOrders[i].get()->assignDriver(this);
+        _sys->markOrderInProgress(_sys->pendingOrders[i], i);
+    }
+}
+
+std::ostream &operator<<(std::ostream &out, const Driver &obj)
 {
     return out << (const User &)obj << DELIM << obj._phoneNumber << DELIM << obj._plateNumber;
 }

@@ -19,6 +19,8 @@ class Order
     double _cost = 0;
     uint8_t _passengerCount = 0;
 
+    unsigned short _arriveIn = 0;
+
 public:
     Order(const Address &, const Address &,
           const MyVector<Client *> &, Driver *,
@@ -30,6 +32,10 @@ public:
 
     const Address &getPickupAddress() const noexcept;
     const Address &getDestAddress() const noexcept;
+    const size_t getID() const noexcept;
+
+    void assignDriver(Driver *) noexcept;
+    void updateArriveTime(unsigned short) noexcept;
 
     friend std::ostream &operator<<(std::ostream &, const Order &);
 };

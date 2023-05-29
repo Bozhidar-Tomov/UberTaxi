@@ -27,10 +27,8 @@ public:
     void loadData();
     void saveData();
 
-    SharedPtr<Driver> getClosestDriver(const Address &) const;
-    void notifyDrivers() const;
-
     void addOrder(SharedPtr<Order>);
+    void markOrderInProgress(SharedPtr<Order>, size_t idx);
 
     SharedPtr<Client> loginClient(const char *username, const char *password);
     SharedPtr<Driver> loginDriver(const char *username, const char *password);

@@ -40,6 +40,7 @@ public:
     void push_at(T &&, size_t);
 
     void pop_back();
+    void pop_at(size_t);
     const T &back() const;
     T &back();
 

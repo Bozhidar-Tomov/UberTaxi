@@ -156,39 +156,16 @@ void System::saveData()
     file.close();
 }
 
-SharedPtr<Driver> System::getClosestDriver(const Address &address) const
-{
-    double smallestDist = DBL_MAX;
-    SharedPtr<Driver> driver;
-    static double dist;
-
-    for (size_t i = 0; i < drivers.size(); ++i)
-    {
-        if (!drivers[i]->hasOrder())
-        {
-            dist = drivers[i]->getAddress().getDist(address);
-
-            if (dist < smallestDist)
-            {
-                driver = drivers[i];
-                smallestDist = dist;
-            }
-        }
-    }
-    return driver;
-}
-
-// TODO: notify drivers. maybe do a pool with pending orders
-void System::notifyDrivers() const
-{
-    // for (size_t i = 0; i < drivers.size(); ++i)
-    // {
-    // }
-}
-
 void System::addOrder(SharedPtr<Order> order)
 {
     pendingOrders.push_back(order);
+}
+
+void System::markOrderInProgress(SharedPtr<Order> order, size_t idx)
+{
+    // TODO: check if idx id valid
+    inProgressOrders.push_back(order);
+    pendingOrders.pop_at(idx);
 }
 
 SharedPtr<Client> System::loginClient(const char *name, const char *password)

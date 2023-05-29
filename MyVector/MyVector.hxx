@@ -92,6 +92,7 @@ inline void MyVector<T>::push_back(T &&element)
 template <typename T>
 inline void MyVector<T>::push_at(const T &element, size_t idx)
 {
+    // TODO: add check for idx
     if (_size == _capacity)
         reserve();
 
@@ -105,6 +106,7 @@ inline void MyVector<T>::push_at(const T &element, size_t idx)
 template <typename T>
 inline void MyVector<T>::push_at(T &&element, size_t idx)
 {
+    // TODO: add check for idx
     if (_size == _capacity)
         reserve();
 
@@ -122,6 +124,18 @@ inline void MyVector<T>::pop_back()
         throw std::range_error("Container is empty");
 
     _data[--_size].~T();
+}
+
+template <typename T>
+inline void MyVector<T>::pop_at(size_t idx)
+{
+    // TODO: add check for idx and not empty
+    at(idx).~T();
+
+    for (size_t i = idx; i < _size - 2; ++i)
+        new (_data + i) T(std::move(_data[i + 1]));
+
+    --_size;
 }
 
 template <typename T>

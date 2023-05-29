@@ -23,6 +23,8 @@ int main()
     SharedPtr<Driver> driver = sys.loginDriver("new name", "P@ssword1");
 
     driver->checkAvailableOrders();
+    driver->acceptOrder(1, 25);
 
-    std::cin.get();
+    // std::cin.get();
+    // BUG: MEMORY PROBLEM/LEAK DETECTED ON ~System() probably on calling pop_at() in markOrderInProgress().
 }

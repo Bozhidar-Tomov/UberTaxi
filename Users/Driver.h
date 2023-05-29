@@ -27,8 +27,7 @@ public:
     const Address &getAddress() const;
 
     void checkAvailableOrders();
-    void acceptOrder();
-    void declineOrder();
+    void acceptOrder(size_t, unsigned short);
     void finishOrder();
     void acceptPayment();
 
