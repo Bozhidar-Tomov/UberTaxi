@@ -1,5 +1,6 @@
 const char CLIENT_DATA_FILE_DIR[] = "Data/clientData.dat";
 const char DRIVER_DATA_FILE_DIR[] = "Data/driverData.dat";
+const char LINE_SEPARATOR[] = "---------------------------------------------------------------------";
 const unsigned MAX_NAME_LEN = 20;
 const unsigned MIN_NAME_LEN = 3;
 

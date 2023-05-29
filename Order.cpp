@@ -19,10 +19,15 @@ const Address &Order::getPickupAddress() const noexcept
   return _pickupAddress;
 }
 
+const Address &Order::getDestAddress() const noexcept
+{
+  return _destAddress;
+}
+
 std::ostream &operator<<(std::ostream &out, const Order &obj)
 {
-  return out << "ID: " << obj._id << '\n'
-             << "Pickup address: " << obj._pickupAddress << '\n'
-             << "Destination: " << obj._destAddress << '\n'
-             << "Number of passengers: " << obj._passengerCount;
+  return out << "ID --> " << obj._id << '\n'
+             << "Pickup address --> " << obj._pickupAddress << '\n'
+             << "Destination --> " << obj._destAddress << '\n'
+             << "Number of passengers --> " << int16_t(obj._passengerCount);
 }

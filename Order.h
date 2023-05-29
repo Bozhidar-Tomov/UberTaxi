@@ -29,6 +29,7 @@ public:
     ~Order() noexcept = default;
 
     const Address &getPickupAddress() const noexcept;
+    const Address &getDestAddress() const noexcept;
 
     friend std::ostream &operator<<(std::ostream &, const Order &);
 };

@@ -51,7 +51,8 @@ void Driver::checkAvailableOrders()
 
     while (!pq.empty())
     {
-        std::cout << *pq.peek() << '\n';
+        std::cout << *pq.peek() << '\n'
+                  << LINE_SEPARATOR << '\n';
         pq.pop();
     }
 }

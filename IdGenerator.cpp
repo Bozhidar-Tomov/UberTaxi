@@ -4,8 +4,8 @@ size_t IdGenerator::id = 0;
 
 size_t IdGenerator::getId() noexcept
 {
-    return id;
     generateNext();
+    return id;
 }
 
 void IdGenerator::generateNext() noexcept
