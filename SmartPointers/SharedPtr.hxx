@@ -43,33 +43,34 @@ private:
     Counter *counter = nullptr;
 
 public:
-    SharedPtr();                //
-    explicit SharedPtr(T *ptr); //
+    SharedPtr();
+    explicit SharedPtr(T *ptr);
 
-    SharedPtr(const SharedPtr<T> &);            //
-    SharedPtr &operator=(const SharedPtr<T> &); //
+    SharedPtr(const SharedPtr<T> &);
+    SharedPtr &operator=(const SharedPtr<T> &);
 
-    SharedPtr(SharedPtr<T> &&) noexcept;            //
-    SharedPtr &operator=(SharedPtr<T> &&) noexcept; //
+    SharedPtr(SharedPtr<T> &&) noexcept;
+    SharedPtr &operator=(SharedPtr<T> &&) noexcept;
 
-    ~SharedPtr() noexcept; //
+    ~SharedPtr() noexcept;
 
-    T &operator*() noexcept;             //
-    const T &operator*() const noexcept; //
-    T *operator->() const noexcept;      //
+    T &operator*();
+    const T &operator*() const;
+    T *operator->() const noexcept;
+    T *get() const noexcept;
 
-    size_t use_count() const noexcept;       //
-    bool unique() const noexcept;            //
-    explicit operator bool() const noexcept; //
+    size_t use_count() const noexcept;
+    bool unique() const noexcept;
+    explicit operator bool() const noexcept;
 
-    void reset() noexcept; //
-    void reset(T *ptr);    //
+    void reset() noexcept;
+    void reset(T *ptr);
     void swap(SharedPtr<T> &) noexcept;
 
 private:
-    void copyFrom(const SharedPtr<T> &);     //
-    void moveFrom(SharedPtr<T> &&) noexcept; //
-    void free() noexcept;                    //
+    void copyFrom(const SharedPtr<T> &);
+    void moveFrom(SharedPtr<T> &&) noexcept;
+    void free() noexcept;
 };
 
 template <typename T>
@@ -129,7 +130,7 @@ inline SharedPtr<T>::~SharedPtr() noexcept
 }
 
 template <typename T>
-inline T &SharedPtr<T>::operator*() noexcept
+inline T &SharedPtr<T>::operator*()
 {
     if (!_ptr)
         throw std::runtime_error("Pointer not set");
@@ -137,7 +138,7 @@ inline T &SharedPtr<T>::operator*() noexcept
 }
 
 template <typename T>
-inline const T &SharedPtr<T>::operator*() const noexcept
+inline const T &SharedPtr<T>::operator*() const
 {
     if (!_ptr)
         throw std::runtime_error("Pointer not set");
@@ -146,6 +147,12 @@ inline const T &SharedPtr<T>::operator*() const noexcept
 
 template <typename T>
 inline T *SharedPtr<T>::operator->() const noexcept
+{
+    return _ptr;
+}
+
+template <typename T>
+inline T *SharedPtr<T>::get() const noexcept
 {
     return _ptr;
 }

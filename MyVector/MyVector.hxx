@@ -289,7 +289,7 @@ inline void MyVector<T>::reserve(size_t newCapacity)
         // move each object from the old array to the new one
         new (newData + i) T(std::move(_data[i]));
 
-        // delete each object from the old array by calling the destructor
+        // delete each object from the old array by calling the destructor in case of when T does not have move semantics
         _data[i].~T();
     }
 

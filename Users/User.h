@@ -4,6 +4,7 @@
 #include "../MyString/MyString.h"
 #include "../MyVector/MyVector.h"
 #include "../Order.h"
+#include "../SmartPointers/SharedPtr.hxx"
 
 class System;
 // TODO: Fix alignment of all classes
@@ -12,9 +13,9 @@ class User
 protected:
     MyString _name;
     MyString _password;
-    Order *_currentOrder = nullptr;
+    SharedPtr<Order> _currentOrder;
+    System *_sys;
     double _moneyAvailable = 0;
-    System *_sys = nullptr;
 
 public:
     User() = default;
@@ -32,7 +33,9 @@ public:
     void setMoneyAvailable(double) noexcept;
     double getMoneyAvailable() const noexcept;
 
-    void addOrder(Order *);
+    void loadSystemPtr(System *) noexcept;
+
+    void addOrder(SharedPtr<Order>);
     void removeOrder();
     bool hasOrder() const noexcept;
     // void logout();
@@ -40,8 +43,4 @@ public:
 
     friend std::ostream &operator<<(std::ostream &, const User &);
     friend std::istream &operator>>(std::istream &, User &);
-
-private:
-    bool validateUsername(const char *) const;
-    bool validatePassword(const char *) const;
 };

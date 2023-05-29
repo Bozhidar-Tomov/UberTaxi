@@ -10,10 +10,11 @@ Client::Client(MyString &&userName, MyString &&password, double moneyAvailable)
 void Client::order(Address &&pickupAddress, Address &&destAddress, uint8_t passengerCount)
 {
     MyVector<Client *> cl;
-
     cl.push_back(this);
-    _sys->orders.push_back(std::move(Order(std::move(pickupAddress), std::move(destAddress), std::move(cl), nullptr, passengerCount)));
-    _currentOrder = &_sys->orders.at(_sys->orders.size() - 1);
+
+    SharedPtr<Order> newOrder(new Order(std::move(pickupAddress), std::move(destAddress), std::move(cl), nullptr, passengerCount));
+    this->addOrder(newOrder);
+    _sys->addOrder(newOrder);
 }
 
 std::ostream &operator<<(std::ostream &out, const Client &obj)

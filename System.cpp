@@ -99,14 +99,15 @@ void System::loadData()
 
     while (!file.eof() && file.getline(line, BUFF_SIZE))
     {
-        Client c;
+        SharedPtr<Client> c(new Client());
 
         ss.clear();
         ss.seekp(0, std::ios::beg);
         ss.str(line);
 
-        ss >> c;
-        clients.push_back(std::move(c));
+        ss >> *c;
+        c->loadSystemPtr(this);
+        clients.push_back(c);
     }
 
     file.close();
@@ -118,14 +119,15 @@ void System::loadData()
 
     while (!file.eof() && file.getline(line, BUFF_SIZE))
     {
-        Driver d;
+        SharedPtr<Driver> d(new Driver());
 
         ss.clear();
         ss.seekp(0, std::ios::beg);
         ss.str(line);
 
-        ss >> d;
-        drivers.push_back(std::move(d));
+        ss >> *d;
+        d->loadSystemPtr(this);
+        drivers.push_back(d);
     }
 
     file.close();
@@ -139,7 +141,7 @@ void System::saveData()
         throw file_stream_error("Cannot open file!", CLIENT_DATA_FILE_DIR);
 
     for (size_t i = 0; i < clients.size(); ++i)
-        file << clients[i] << '\n';
+        file << *clients[i] << '\n';
 
     file.close();
 
@@ -149,26 +151,26 @@ void System::saveData()
         throw file_stream_error("Cannot open file!", DRIVER_DATA_FILE_DIR);
 
     for (size_t i = 0; i < drivers.size(); ++i)
-        file << drivers[i] << '\n';
+        file << *drivers[i] << '\n';
 
     file.close();
 }
 
-const Driver *System::getClosestDriver(const Address &address) const
+SharedPtr<Driver> System::getClosestDriver(const Address &address) const
 {
     double smallestDist = DBL_MAX;
-    const Driver *driver = nullptr;
+    SharedPtr<Driver> driver;
     static double dist;
 
     for (size_t i = 0; i < drivers.size(); ++i)
     {
-        if (!drivers[i].hasOrder())
+        if (!drivers[i]->hasOrder())
         {
-            dist = drivers[i].getAddress().getDist(address);
+            dist = drivers[i]->getAddress().getDist(address);
 
             if (dist < smallestDist)
             {
-                driver = &drivers[i];
+                driver = drivers[i];
                 smallestDist = dist;
             }
         }
@@ -184,53 +186,60 @@ void System::notifyDrivers() const
     // }
 }
 
-User const *System::loginUser(const char *name, const char *password, const UserType userType)
+void System::addOrder(SharedPtr<Order> order)
 {
-    if (userType == UserType::client)
-    {
-        for (size_t i = 0; i < clients.size(); ++i)
-        {
-            if (clients[i].getName() != name)
-                continue;
+    pendingOrders.push_back(order);
+}
 
-            if (clients[i].getPassword() == password)
-                return &clients[i];
-        }
-    }
+SharedPtr<Client> System::loginClient(const char *name, const char *password)
+{
 
-    for (size_t i = 0; i < drivers.size(); ++i)
+    for (size_t i = 0; i < clients.size(); ++i)
     {
-        if (drivers[i].getName() != name)
+        if (clients[i]->getName() != name)
             continue;
 
-        if (drivers[i].getPassword() == password)
-            return &drivers[i];
+        if (clients[i]->getPassword() == password)
+            return clients[i];
     }
-    return nullptr;
+
+    return SharedPtr<Client>();
 }
-
-User const *System::registerClient(const char *name, const char *password, double moneyAvailable)
-{
-    for (size_t i = 0; i < clients.size(); ++i)
-        if (clients[i].getName() == name)
-            return nullptr;
-
-    if (!validateUsername(name) || !validatePassword(password))
-        return nullptr;
-
-    clients.push_back(std::move(Client(MyString(name), MyString(password), moneyAvailable)));
-    return &clients[clients.size() - 1];
-}
-
-User const *System::registerDriver(const char *name, const char *password, const char *phoneNumber, const char *plateNumber, double moneyAvailable)
+SharedPtr<Driver> System::loginDriver(const char *name, const char *password)
 {
     for (size_t i = 0; i < drivers.size(); ++i)
-        if (drivers[i].getName() == name)
-            return nullptr;
+    {
+        if (drivers[i]->getName() != name)
+            continue;
+
+        if (drivers[i]->getPassword() == password)
+            return drivers[i];
+    }
+    return SharedPtr<Driver>();
+}
+
+SharedPtr<Client> System::registerClient(const char *name, const char *password, double moneyAvailable)
+{
+    for (size_t i = 0; i < clients.size(); ++i)
+        if (clients[i]->getName() == name)
+            return SharedPtr<Client>();
 
     if (!validateUsername(name) || !validatePassword(password))
-        return nullptr;
+        return SharedPtr<Client>();
 
-    drivers.push_back(std::move(Driver(MyString(name), MyString(password), moneyAvailable, Address(), MyString(phoneNumber), MyString(plateNumber))));
-    return &drivers[drivers.size() - 1];
+    clients.push_back(SharedPtr<Client>(new Client(MyString(name), MyString(password), moneyAvailable)));
+    return clients[clients.size() - 1];
+}
+
+SharedPtr<Driver> System::registerDriver(const char *name, const char *password, const char *phoneNumber, const char *plateNumber, double moneyAvailable)
+{
+    for (size_t i = 0; i < drivers.size(); ++i)
+        if (drivers[i]->getName() == name)
+            return SharedPtr<Driver>();
+
+    if (!validateUsername(name) || !validatePassword(password))
+        return SharedPtr<Driver>();
+
+    drivers.push_back(SharedPtr<Driver>(new Driver(MyString(name), MyString(password), moneyAvailable, Address(), MyString(phoneNumber), MyString(plateNumber))));
+    return drivers[drivers.size() - 1];
 }

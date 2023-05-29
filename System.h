@@ -1,6 +1,7 @@
 #pragma once
 #include "MyVector/MyVector.h"
 #include "SmartPointers/SharedPtr.hxx"
+#include "SmartPointers/UniquePtr.hxx"
 #include "Users/Client.h"
 #include "Users/Driver.h"
 #include "Order.h"
@@ -16,18 +17,24 @@ class System
 {
     // TODO: should be private
 public:
-    MyVector<Client> clients;
-    MyVector<Driver> drivers;
-    MyVector<SharedPtr<Order>> orders;
+    MyVector<SharedPtr<Client>> clients;
+    MyVector<SharedPtr<Driver>> drivers;
+    MyVector<SharedPtr<Order>> pendingOrders;
+    MyVector<SharedPtr<Order>> inProgressOrders;
 
 public:
+    // TODO: add system pointer to each client and driver
     void loadData();
     void saveData();
 
-    const Driver *getClosestDriver(const Address &) const;
+    SharedPtr<Driver> getClosestDriver(const Address &) const;
     void notifyDrivers() const;
 
-    User *loginUser(const char *username, const char *password, const UserType userType);
-    User *registerClient(const char *username, const char *password, double moneyAvailable = 0);
-    User *registerDriver(const char *username, const char *password, const char *phoneNumber, const char *plateNumber, double moneyAvailable = 0);
+    void addOrder(SharedPtr<Order>);
+
+    SharedPtr<Client> loginClient(const char *username, const char *password);
+    SharedPtr<Driver> loginDriver(const char *username, const char *password);
+
+    SharedPtr<Client> registerClient(const char *username, const char *password, double moneyAvailable = 0);
+    SharedPtr<Driver> registerDriver(const char *username, const char *password, const char *phoneNumber, const char *plateNumber, double moneyAvailable = 0);
 };

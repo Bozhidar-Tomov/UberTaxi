@@ -47,19 +47,24 @@ double User::getMoneyAvailable() const noexcept
     return _moneyAvailable;
 }
 
-void User::addOrder(Order *order)
+void User::addOrder(SharedPtr<Order> order)
 {
     _currentOrder = order;
 }
 
+void User::loadSystemPtr(System *sys) noexcept
+{
+    _sys = sys;
+}
+
 void User::removeOrder()
 {
-    _currentOrder = nullptr;
+    _currentOrder.reset();
 }
 
 bool User::hasOrder() const noexcept
 {
-    return _currentOrder;
+    return _currentOrder.operator bool();
 }
 
 std::ostream &operator<<(std::ostream &out, const User &obj)
