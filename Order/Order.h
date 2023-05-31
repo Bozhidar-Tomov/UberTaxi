@@ -1,6 +1,6 @@
 #pragma once
-#include "MyVector/MyVector.h"
-#include "./Address.h"
+#include "../MyVector/MyVector.h"
+#include "../Address.h"
 #include "IdGenerator.h"
 #include <ostream>
 

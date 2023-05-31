@@ -3,7 +3,7 @@
 #include <istream>
 #include "../MyString/MyString.h"
 #include "../MyVector/MyVector.h"
-#include "../Order.h"
+#include "../Order/Order.h"
 #include "../SmartPointers/SharedPtr.hxx"
 
 class System;
