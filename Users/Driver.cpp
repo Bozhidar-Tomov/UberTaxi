@@ -65,6 +65,7 @@ void Driver::acceptOrder(size_t id, unsigned short minutes)
             continue;
 
         _sys->pendingOrders[i].get()->assignDriver(this);
+        _sys->pendingOrders[i].get()->updateArriveTime(minutes);
         _sys->markOrderInProgress(_sys->pendingOrders[i], i);
     }
 }

@@ -92,7 +92,7 @@ inline void MyVector<T>::push_back(T &&element)
 template <typename T>
 inline void MyVector<T>::push_at(const T &element, size_t idx)
 {
-    if (empty() || idx > _size - 1)
+    if (idx > _size)
         throw std::invalid_argument("Invalid index.");
 
     if (_size == _capacity)
@@ -108,7 +108,7 @@ inline void MyVector<T>::push_at(const T &element, size_t idx)
 template <typename T>
 inline void MyVector<T>::push_at(T &&element, size_t idx)
 {
-    if (empty() || idx > _size - 1)
+    if (idx > _size)
         throw std::invalid_argument("Invalid index.");
 
     if (_size == _capacity)

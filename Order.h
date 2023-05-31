@@ -32,10 +32,13 @@ public:
 
     const Address &getPickupAddress() const noexcept;
     const Address &getDestAddress() const noexcept;
-    const size_t getID() const noexcept;
+    size_t getID() const noexcept;
+    unsigned short getArriveIn() const noexcept;
 
     void assignDriver(Driver *) noexcept;
     void updateArriveTime(unsigned short) noexcept;
+
+    bool isInProgress() const noexcept;
 
     friend std::ostream &operator<<(std::ostream &, const Order &);
 };

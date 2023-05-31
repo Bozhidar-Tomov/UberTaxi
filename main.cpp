@@ -22,6 +22,11 @@ int main()
 
     SharedPtr<Driver> driver = sys.loginDriver("new name", "P@ssword1");
 
-    driver->checkAvailableOrders();
-    driver->acceptOrder(1, 25);
+    // driver->checkAvailableOrders();
+    driver->acceptOrder(2, 25);
+
+    for (int i = 0; i < sys.inProgressOrders.size(); ++i)
+    {
+        std::cout << *sys.inProgressOrders[i] << " mins: " << sys.inProgressOrders[i]->getArriveIn() << '\n';
+    }
 }

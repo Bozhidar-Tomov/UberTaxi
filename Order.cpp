@@ -24,9 +24,14 @@ const Address &Order::getDestAddress() const noexcept
   return _destAddress;
 }
 
-const size_t Order::getID() const noexcept
+size_t Order::getID() const noexcept
 {
   return _id;
+}
+
+unsigned short Order::getArriveIn() const noexcept
+{
+  return _arriveIn;
 }
 
 void Order::assignDriver(Driver *driver) noexcept
@@ -37,6 +42,11 @@ void Order::assignDriver(Driver *driver) noexcept
 void Order::updateArriveTime(unsigned short minutes) noexcept
 {
   _arriveIn = minutes;
+}
+
+bool Order::isInProgress() const noexcept
+{
+  return (bool)_driver;
 }
 
 std::ostream &operator<<(std::ostream &out, const Order &obj)

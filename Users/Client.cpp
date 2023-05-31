@@ -17,6 +17,14 @@ void Client::order(Address &&pickupAddress, Address &&destAddress, uint8_t passe
     _sys->addOrder(newOrder);
 }
 
+void Client::checkOrder()
+{
+    if (_currentOrder->isInProgress())
+    {
+        // TODO user should have multiple orders, not just one.
+    }
+}
+
 std::ostream &operator<<(std::ostream &out, const Client &obj)
 {
     return out << (const User &)obj;
