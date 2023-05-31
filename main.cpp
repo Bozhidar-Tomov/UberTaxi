@@ -24,7 +24,4 @@ int main()
 
     driver->checkAvailableOrders();
     driver->acceptOrder(1, 25);
-
-    // std::cin.get();
-    // BUG: MEMORY PROBLEM/LEAK DETECTED ON ~System() probably on calling pop_at() in markOrderInProgress().
 }

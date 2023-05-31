@@ -40,7 +40,7 @@ const Address &Driver::getAddress() const
     return _currAddress;
 }
 
-void Driver::checkAvailableOrders()
+void Driver::checkAvailableOrders() const
 {
     PriorityQueue<SharedPtr<Order>> pq(DBL_MAX);
 
