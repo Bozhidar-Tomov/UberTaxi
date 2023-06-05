@@ -2,8 +2,9 @@
 #include "../constants.h"
 #include "../System.h"
 #include "../PriorityQueue/PriorityQueue.h"
-#include <float.h> // including DBL_MAX
+// #include <float.h> // including DBL_MAX
 #include <iostream>
+#include "../Utils.h"
 
 Driver::Driver(const MyString &name, const MyString &password, double moneyAvailable,
                const Address &address, const MyString &phoneNumber, const MyString &plateNumber)
@@ -42,32 +43,40 @@ const Address &Driver::getAddress() const
 
 void Driver::checkAvailableOrders() const
 {
-    PriorityQueue<SharedPtr<Order>> pq(DBL_MAX);
-
-    for (size_t i = 0; i < _sys->pendingOrders.size(); ++i)
-    {
-        pq.push(_sys->pendingOrders[i], _currAddress.getDist(_sys->pendingOrders[i].get()->getPickupAddress()));
-    }
-
-    while (!pq.empty())
-    {
-        std::cout << *pq.peek() << '\n'
+    for (size_t i = 0; i < _upcomingOrders.size(); ++i)
+        std::cout << *_upcomingOrders[i] << '\n'
                   << LINE_SEPARATOR << '\n';
-        pq.pop();
-    }
 }
 
+void Driver::addOrder(SharedPtr<Order> order)
+{
+    _upcomingOrders.push_back(order);
+}
+
+// TODO: update it
 void Driver::acceptOrder(size_t id, unsigned short minutes)
 {
-    for (size_t i = 0; i < _sys->pendingOrders.size(); ++i)
-    {
-        if (_sys->pendingOrders[i].get()->getID() != id)
-            continue;
+    if (_currentOrder.get())
+        throw std::logic_error(
+            *MyString("Cannot accept new order before finishing current order. Order in progress ID: ")
+                 .append(intToChar(_currentOrder->getID()))
+                 .append("\n"));
 
-        _sys->pendingOrders[i].get()->assignDriver(this);
-        _sys->pendingOrders[i].get()->updateArriveTime(minutes);
-        _sys->markOrderInProgress(_sys->pendingOrders[i], i);
+    for (size_t i = 0; i < _upcomingOrders.size(); ++i)
+    {
+        if (_upcomingOrders[i]->getID() == id)
+        {
+            _upcomingOrders[i]->assignDriver(this);
+            _upcomingOrders[i]->updateArriveTime(minutes);
+
+            _currentOrder = _upcomingOrders[i];
+            _upcomingOrders.pop_at(i);
+
+            _sys->markOrderInProgress(id);
+            return;
+        }
     }
+    throw std::invalid_argument("Order not found.");
 }
 
 std::ostream &operator<<(std::ostream &out, const Driver &obj)

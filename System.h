@@ -17,8 +17,12 @@ class System
 {
     // TODO: should be private
 public:
+    // IDEA: make heterogeneous container
+    // IDEA: make vector of objects
     MyVector<SharedPtr<Client>> clients;
     MyVector<SharedPtr<Driver>> drivers;
+
+    // IDEA: leave it as pointers since a lot of change is happening
     MyVector<SharedPtr<Order>> pendingOrders;
     MyVector<SharedPtr<Order>> inProgressOrders;
 
@@ -28,7 +32,7 @@ public:
     void saveData();
 
     void addOrder(SharedPtr<Order>);
-    void markOrderInProgress(SharedPtr<Order>, size_t idx);
+    void markOrderInProgress(size_t id);
 
     SharedPtr<Client> loginClient(const char *username, const char *password);
     SharedPtr<Driver> loginDriver(const char *username, const char *password);

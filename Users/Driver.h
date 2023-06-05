@@ -8,7 +8,7 @@ class Driver : public User
     Address _currAddress;
     MyString _phoneNumber;
     MyString _plateNumber;
-    Order *_upcomingOrder = nullptr;
+    MyVector<SharedPtr<Order>> _upcomingOrders;
 
 public:
     Driver() = default;
@@ -27,6 +27,7 @@ public:
     const Address &getAddress() const;
 
     void checkAvailableOrders() const;
+    void addOrder(SharedPtr<Order>);
     void acceptOrder(size_t, unsigned short);
     void finishOrder();
     void acceptPayment();

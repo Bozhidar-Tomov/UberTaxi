@@ -85,6 +85,30 @@ namespace
 
         return hasDigit && hasUpper && hasLower && hasSymbol;
     }
+
+    size_t binarySearch(MyVector<SharedPtr<Order>> &orders, size_t id)
+    {
+        size_t low = 0;
+        size_t high = orders.size() - 1;
+
+        while (low <= high)
+        {
+            size_t mid = low + (high - low) / 2;
+
+            if (orders[mid]->getID() == id)
+                return mid;
+
+            if (orders[mid]->getID() < id)
+                low = mid + 1;
+            else
+            {
+                if (mid == 0)
+                    break;
+                high = mid - 1;
+            }
+        }
+        return SIZE_MAX;
+    }
 }
 
 void System::loadData()
@@ -158,19 +182,36 @@ void System::saveData()
 
 void System::addOrder(SharedPtr<Order> order)
 {
+    // TODO: handle if there are no drivers
+    double closestDist = DBL_MAX;
+    size_t idxClosestDriver = SIZE_MAX;
+
+    for (size_t i = 0; i < drivers.size(); ++i)
+    {
+        static double dist = drivers[i]->getAddress().getDist(order->getPickupAddress());
+        if (dist < closestDist)
+        {
+            closestDist = dist;
+            idxClosestDriver = i;
+        }
+    }
     pendingOrders.push_back(order);
+    drivers.at(idxClosestDriver)->addOrder(order);
 }
 
-void System::markOrderInProgress(SharedPtr<Order> order, size_t idx)
+void System::markOrderInProgress(size_t id)
 {
-    // TODO: check if idx id valid
-    inProgressOrders.push_back(order);
+    size_t idx = binarySearch(pendingOrders, id);
+
+    if (idx == SIZE_MAX)
+        throw std::runtime_error("Order not found in the system.");
+
+    inProgressOrders.push_back(std::move(pendingOrders.at(idx)));
     pendingOrders.pop_at(idx);
 }
 
 SharedPtr<Client> System::loginClient(const char *name, const char *password)
 {
-
     for (size_t i = 0; i < clients.size(); ++i)
     {
         if (clients[i]->getName() != name)

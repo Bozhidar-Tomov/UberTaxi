@@ -12,7 +12,7 @@ class Order
     Address _pickupAddress;
     Address _destAddress;
 
-    MyVector<Client *> _clients;
+    Client *_client;
     Driver *_driver;
 
     size_t _id = 0;
@@ -22,11 +22,12 @@ class Order
     unsigned short _arriveIn = 0;
 
 public:
+    // IDEA: maybe remove driver* form constructor
     Order(const Address &, const Address &,
-          const MyVector<Client *> &, Driver *,
+          Client *, Driver *,
           uint8_t);
     Order(Address &&, Address &&,
-          MyVector<Client *> &&, Driver *,
+          Client *, Driver *,
           uint8_t);
     ~Order() noexcept = default;
 

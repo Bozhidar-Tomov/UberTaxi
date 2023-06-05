@@ -22,7 +22,7 @@ int main()
 
     SharedPtr<Driver> driver = sys.loginDriver("new name", "P@ssword1");
 
-    // driver->checkAvailableOrders();
+    driver->checkAvailableOrders();
     driver->acceptOrder(2, 25);
 
     for (int i = 0; i < sys.inProgressOrders.size(); ++i)

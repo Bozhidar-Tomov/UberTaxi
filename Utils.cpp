@@ -58,3 +58,48 @@ double strToDouble(const char *str) noexcept
 
     return isNegative ? -x : x;
 }
+
+char *intToChar(int32_t num)
+{
+    static char buffer[50];
+    int32_t i = 0;
+    bool isNegative = false;
+
+    if (num == 0)
+    {
+        buffer[i++] = '0';
+        buffer[i] = '\0';
+        return buffer;
+    }
+
+    if (num < 0)
+    {
+        isNegative = true;
+        num = -num;
+    }
+
+    while (num != 0)
+    {
+        int32_t rem = num % 10;
+        buffer[i++] = char(rem + '0');
+        num = num / 10;
+    }
+
+    if (isNegative)
+        buffer[i++] = '-';
+
+    buffer[i] = '\0';
+
+    int32_t start = 0;
+    int32_t end = i - 1;
+    while (start < end)
+    {
+        char temp = buffer[start];
+        buffer[start] = buffer[end];
+        buffer[end] = temp;
+        start++;
+        end--;
+    }
+
+    return buffer;
+}
