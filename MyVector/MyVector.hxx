@@ -133,10 +133,10 @@ inline void MyVector<T>::pop_back()
 template <typename T>
 inline void MyVector<T>::pop_at(size_t idx)
 {
-    if (empty() || idx > _size - 1)
-        throw std::invalid_argument("Invalid index.");
+    if (empty() || idx >= _size)
+        throw std::invalid_argument("Invalid index or empty container.");
 
-    for (size_t i = idx; i < _size - 2; ++i)
+    for (size_t i = idx; i < _size - 1; ++i)
         new (_data + i) T(std::move(_data[i + 1]));
 
     --_size;

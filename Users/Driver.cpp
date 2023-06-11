@@ -44,8 +44,8 @@ const Address &Driver::getAddress() const
 void Driver::checkAvailableOrders() const
 {
     for (size_t i = 0; i < _upcomingOrders.size(); ++i)
-        std::cout << *_upcomingOrders[i] << '\n'
-                  << LINE_SEPARATOR << '\n';
+        std::cout << *_upcomingOrders[i] << std::endl
+                  << LINE_SEPARATOR << std::endl;
 }
 
 void Driver::addOrder(SharedPtr<Order> order)
@@ -81,6 +81,13 @@ void Driver::acceptOrder(size_t id, unsigned short minutes)
 
 std::ostream &operator<<(std::ostream &out, const Driver &obj)
 {
+    if (&out == &std::cout)
+    {
+        // TODO explicit casing
+        return out << (User &)(obj) << std::endl
+                   << "Plate Number: " << obj._plateNumber << std::endl
+                   << "Phone Number: " << obj._phoneNumber;
+    }
     return out << (const User &)obj << DELIM << obj._phoneNumber << DELIM << obj._plateNumber;
 }
 

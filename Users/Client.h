@@ -12,7 +12,7 @@ public:
     Client(MyString &&, MyString &&, double);
 
     void order(Address &&, Address &&, uint8_t);
-    void checkOrder();
+    void checkOrder() const;
     void cancelOrder();
     void payOrder();
     void reteDriver();

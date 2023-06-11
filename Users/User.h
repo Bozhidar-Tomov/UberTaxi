@@ -1,6 +1,5 @@
 #pragma once
-#include <ostream>
-#include <istream>
+#include <iostream>
 #include "../MyString/MyString.h"
 #include "../MyVector/MyVector.h"
 #include "../Order/Order.h"

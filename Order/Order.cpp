@@ -34,6 +34,11 @@ unsigned short Order::getArriveIn() const noexcept
   return _arriveIn;
 }
 
+const Driver *Order::getDriver() const noexcept
+{
+  return _driver;
+}
+
 void Order::assignDriver(Driver *driver) noexcept
 {
   _driver = driver;

@@ -1,4 +1,3 @@
-#include <iostream>
 #include "User.h"
 #include "../constants.h"
 #include "../Utils.h"
@@ -69,6 +68,9 @@ bool User::hasOrder() const noexcept
 
 std::ostream &operator<<(std::ostream &out, const User &obj)
 {
+    if (&out == &std::cout)
+        return out << "Name: " << obj._name;
+
     return out << obj._name << DELIM << obj._password << DELIM << obj._moneyAvailable;
 }
 

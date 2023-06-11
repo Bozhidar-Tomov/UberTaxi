@@ -12,8 +12,8 @@ class Order
     Address _pickupAddress;
     Address _destAddress;
 
-    Client *_client;
-    Driver *_driver;
+    Client *_client = nullptr;
+    Driver *_driver = nullptr;
 
     size_t _id = 0;
     double _cost = 0;
@@ -35,6 +35,7 @@ public:
     const Address &getDestAddress() const noexcept;
     size_t getID() const noexcept;
     unsigned short getArriveIn() const noexcept;
+    const Driver *getDriver() const noexcept;
 
     void assignDriver(Driver *) noexcept;
     void updateArriveTime(unsigned short) noexcept;
