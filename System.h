@@ -32,6 +32,8 @@ public:
     void saveData();
 
     void addOrder(SharedPtr<Order>);
+    void removeOrder(SharedPtr<Order>);
+
     void markOrderInProgress(size_t id);
 
     SharedPtr<Client> loginClient(const char *username, const char *password);

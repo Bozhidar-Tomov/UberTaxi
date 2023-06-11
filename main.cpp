@@ -26,6 +26,7 @@ int main()
     driver->acceptOrder(1, 25);
 
     client->checkOrder();
+    client->cancelOrder();
 
     // for (int i = 0; i < sys.inProgressOrders.size(); ++i)
     // {

@@ -199,6 +199,38 @@ void System::addOrder(SharedPtr<Order> order)
     drivers.at(idxClosestDriver)->addOrder(order);
 }
 
+void System::removeOrder(SharedPtr<Order> order)
+{
+    bool orderFound = false;
+    if (order->isInProgress())
+    {
+        for (size_t i = 0; i < inProgressOrders.size(); ++i)
+            if (inProgressOrders[i]->getID() == order->getID())
+            {
+                // Notifying the driver
+                order->accessDriver()->removeOrder();
+                order->accessDriver()->setMessage(MyString("Attention: Order has been canceled!"));
+
+                inProgressOrders.pop_at(i);
+                orderFound = true;
+                break;
+            }
+    }
+    else
+    {
+        for (size_t i = 0; i < pendingOrders.size(); ++i)
+            if (pendingOrders[i]->getID() == order->getID())
+            {
+                pendingOrders.pop_at(i);
+                orderFound = true;
+                break;
+            }
+    }
+
+    if (!orderFound)
+        throw std::domain_error("Order not found in the system.");
+}
+
 void System::markOrderInProgress(size_t id)
 {
     size_t idx = binarySearch(pendingOrders, id);

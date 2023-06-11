@@ -36,6 +36,7 @@ public:
     size_t getID() const noexcept;
     unsigned short getArriveIn() const noexcept;
     const Driver *getDriver() const noexcept;
+    Driver *accessDriver();
 
     void assignDriver(Driver *) noexcept;
     void updateArriveTime(unsigned short) noexcept;

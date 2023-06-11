@@ -41,6 +41,14 @@ void Client::checkOrder() const
     std::cout << LINE_SEPARATOR << std::endl;
 }
 
+void Client::cancelOrder()
+{
+    if (!_currentOrder.get())
+        throw std::runtime_error("There is no active order.");
+
+    _sys->removeOrder(_currentOrder);
+}
+
 std::ostream &operator<<(std::ostream &out, const Client &obj)
 {
     // TODO use explicit casting. here we should maybe use static cast.

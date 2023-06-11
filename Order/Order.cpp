@@ -38,6 +38,10 @@ const Driver *Order::getDriver() const noexcept
 {
   return _driver;
 }
+Driver *Order::accessDriver()
+{
+  return _driver;
+}
 
 void Order::assignDriver(Driver *driver) noexcept
 {

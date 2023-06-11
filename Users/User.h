@@ -14,6 +14,8 @@ protected:
     MyString _password;
     SharedPtr<Order> _currentOrder;
     System *_sys;
+    // IDEA  make it an array with 5 elements
+    MyString _message;
     double _moneyAvailable = 0;
 
 public:
@@ -37,6 +39,8 @@ public:
     void addOrder(SharedPtr<Order>);
     void removeOrder();
     bool hasOrder() const noexcept;
+
+    void setMessage(MyString &&) noexcept;
     // void logout();
     // void deleteAccount(const MyVector<MyString> &, const MyVector<MyString> &, int *);
 

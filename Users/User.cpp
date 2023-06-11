@@ -66,7 +66,13 @@ bool User::hasOrder() const noexcept
     return _currentOrder.operator bool();
 }
 
-std::ostream &operator<<(std::ostream &out, const User &obj)
+void User::setMessage(MyString &&message) noexcept
+{
+    _message = std::move(message);
+}
+
+std::ostream &
+operator<<(std::ostream &out, const User &obj)
 {
     if (&out == &std::cout)
         return out << "Name: " << obj._name;

@@ -9,6 +9,8 @@ class Driver : public User
     MyString _phoneNumber;
     MyString _plateNumber;
     MyVector<SharedPtr<Order>> _upcomingOrders;
+    // TODO rating
+    double _rating;
 
 public:
     Driver() = default;
