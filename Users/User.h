@@ -4,18 +4,29 @@
 #include "../MyVector/MyVector.h"
 #include "../Order/Order.h"
 #include "../SmartPointers/SharedPtr.hxx"
-
+#include "../constants.h"
 class System;
 // TODO: Fix alignment of all classes
 class User
 {
+    struct Messages
+    {
+    private:
+        MyString _messages[MESSAGE_COUNT];
+        unsigned short count = 0;
+        unsigned int endPtr = 0;
+
+    public:
+        void addMessage(MyString &&) noexcept;
+        void printMessages() const noexcept;
+    };
+
 protected:
     MyString _name;
     MyString _password;
     SharedPtr<Order> _currentOrder;
     System *_sys;
-    // IDEA  make it an array with 5 elements
-    MyString _message;
+    Messages _messages;
     double _moneyAvailable = 0;
 
 public:
@@ -40,7 +51,8 @@ public:
     void removeOrder();
     bool hasOrder() const noexcept;
 
-    void setMessage(MyString &&) noexcept;
+    void addMessage(MyString &&) noexcept;
+    void printMessages() const noexcept;
     // void logout();
     // void deleteAccount(const MyVector<MyString> &, const MyVector<MyString> &, int *);
 

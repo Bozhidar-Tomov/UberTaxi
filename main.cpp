@@ -13,8 +13,6 @@ int main()
 
     sys.loadData();
 
-    SharedPtr<Client> r = sys.clients[0];
-
     SharedPtr<Client> client = sys.loginClient("new name", "P@ssword1");
 
     client->order(Address(MyString("addrs"), 5, 5, MyString("descr")), Address(MyString("addrs"), 50, 50, MyString("descr")), 9);
@@ -27,6 +25,7 @@ int main()
 
     client->checkOrder();
     client->cancelOrder();
+    driver->printMessages();
 
     // for (int i = 0; i < sys.inProgressOrders.size(); ++i)
     // {

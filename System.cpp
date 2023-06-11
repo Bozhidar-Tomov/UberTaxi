@@ -4,6 +4,7 @@
 #include "System.h"
 #include "constants.h"
 #include "Exceptions/file_stream_error.h"
+#include "Utils.h"
 
 namespace
 {
@@ -182,9 +183,11 @@ void System::saveData()
 
 void System::addOrder(SharedPtr<Order> order)
 {
-    // TODO: handle if there are no drivers
     double closestDist = DBL_MAX;
     size_t idxClosestDriver = SIZE_MAX;
+
+    if (drivers.empty())
+        throw std::runtime_error("No drivers available.");
 
     for (size_t i = 0; i < drivers.size(); ++i)
     {
@@ -209,7 +212,10 @@ void System::removeOrder(SharedPtr<Order> order)
             {
                 // Notifying the driver
                 order->accessDriver()->removeOrder();
-                order->accessDriver()->setMessage(MyString("Attention: Order has been canceled!"));
+                order->accessDriver()->addMessage(
+                    std::move(MyString("Attention: Order (ID ")
+                                  .append(intToChar(order->getID()))
+                                  .append(") has been canceled!")));
 
                 inProgressOrders.pop_at(i);
                 orderFound = true;

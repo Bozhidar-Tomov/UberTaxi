@@ -15,8 +15,6 @@ enum UserType
 // TODO: Make it singleton
 class System
 {
-    // TODO: should be private
-public:
     // IDEA: make heterogeneous container
     // IDEA: make vector of objects
     MyVector<SharedPtr<Client>> clients;
@@ -27,7 +25,6 @@ public:
     MyVector<SharedPtr<Order>> inProgressOrders;
 
 public:
-    // TODO: add system pointer to each client and driver
     void loadData();
     void saveData();
 

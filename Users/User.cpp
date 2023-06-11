@@ -66,9 +66,14 @@ bool User::hasOrder() const noexcept
     return _currentOrder.operator bool();
 }
 
-void User::setMessage(MyString &&message) noexcept
+void User::addMessage(MyString &&message) noexcept
 {
-    _message = std::move(message);
+    _messages.addMessage(std::move(message));
+}
+
+void User::printMessages() const noexcept
+{
+    _messages.printMessages();
 }
 
 std::ostream &
@@ -94,4 +99,20 @@ std::istream &operator>>(std::istream &in, User &obj)
     obj.setMoneyAvailable(strToDouble(buff));
 
     return in;
+}
+
+void User::Messages::addMessage(MyString &&message) noexcept
+{
+    if (count != MESSAGE_COUNT)
+        ++count;
+
+    _messages[endPtr] = std::move(message);
+    endPtr = (++endPtr) % MESSAGE_COUNT;
+}
+
+void User::Messages::printMessages() const noexcept
+{
+    unsigned short start = endPtr >= count ? endPtr - count : MESSAGE_COUNT - (count - endPtr);
+    for (unsigned short i = 0; i < count; ++i)
+        std::cout << _messages[(start + i) % MESSAGE_COUNT] << std::endl;
 }

@@ -53,7 +53,6 @@ void Driver::addOrder(SharedPtr<Order> order)
     _upcomingOrders.push_back(order);
 }
 
-// TODO: update it
 void Driver::acceptOrder(size_t id, unsigned short minutes)
 {
     if (_currentOrder.get())
@@ -83,8 +82,7 @@ std::ostream &operator<<(std::ostream &out, const Driver &obj)
 {
     if (&out == &std::cout)
     {
-        // TODO explicit casing
-        return out << (User &)(obj) << std::endl
+        return out << static_cast<const User &>(obj) << std::endl
                    << "Plate Number: " << obj._plateNumber << std::endl
                    << "Phone Number: " << obj._phoneNumber;
     }
@@ -93,7 +91,7 @@ std::ostream &operator<<(std::ostream &out, const Driver &obj)
 
 std::istream &operator>>(std::istream &in, Driver &obj)
 {
-    in >> (User &)(obj);
+    in >> static_cast<User &>(obj);
     char buff[BUFF_SIZE];
 
     in.getline(buff, BUFF_SIZE, DELIM);

@@ -1,17 +1,17 @@
 #include "Order.h"
 
 Order::Order(const Address &address, const Address &dest,
-             Client *client, Driver *driver,
+             Client *client,
              uint8_t passengerCount)
     : _pickupAddress(address), _destAddress(dest),
-      _client(client), _driver(driver),
+      _client(client),
       _passengerCount(passengerCount), _id(IdGenerator::getId()) {}
 
 Order::Order(Address &&address, Address &&dest,
-             Client *client, Driver *driver,
+             Client *client,
              uint8_t passengerCount)
     : _pickupAddress(std::move(address)), _destAddress(std::move(dest)),
-      _client(client), _driver(driver),
+      _client(client),
       _passengerCount(passengerCount), _id(IdGenerator::getId()) {}
 
 const Address &Order::getPickupAddress() const noexcept

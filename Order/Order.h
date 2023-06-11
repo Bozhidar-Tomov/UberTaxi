@@ -22,12 +22,11 @@ class Order
     unsigned short _arriveIn = 0;
 
 public:
-    // IDEA: maybe remove driver* form constructor
     Order(const Address &, const Address &,
-          Client *, Driver *,
+          Client *,
           uint8_t);
     Order(Address &&, Address &&,
-          Client *, Driver *,
+          Client *,
           uint8_t);
     ~Order() noexcept = default;
 

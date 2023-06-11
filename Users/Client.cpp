@@ -13,7 +13,7 @@ void Client::order(Address &&pickupAddress, Address &&destAddress, uint8_t passe
     if (_currentOrder.get())
         throw std::runtime_error("There is an active order. Cannot create another one.");
 
-    SharedPtr<Order> newOrder(new Order(std::move(pickupAddress), std::move(destAddress), this, nullptr, passengerCount));
+    SharedPtr<Order> newOrder(new Order(std::move(pickupAddress), std::move(destAddress), this, passengerCount));
     this->addOrder(newOrder);
     _sys->addOrder(newOrder);
 }
@@ -51,11 +51,10 @@ void Client::cancelOrder()
 
 std::ostream &operator<<(std::ostream &out, const Client &obj)
 {
-    // TODO use explicit casting. here we should maybe use static cast.
-    return out << (const User &)obj;
+    return out << static_cast<const User &>(obj);
 }
 
 std::istream &operator>>(std::istream &in, Client &obj)
 {
-    return in >> (User &)(obj);
+    return in >> static_cast<User &>(obj);
 }
