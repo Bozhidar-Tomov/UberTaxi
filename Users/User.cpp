@@ -71,7 +71,7 @@ void User::addMessage(MyString &&message) noexcept
     _messages.addMessage(std::move(message));
 }
 
-void User::printMessages() const noexcept
+void User::getMessages() const noexcept
 {
     _messages.printMessages();
 }

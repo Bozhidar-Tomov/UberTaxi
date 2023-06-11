@@ -31,6 +31,7 @@ public:
     void checkAvailableOrders() const;
     void addOrder(SharedPtr<Order>);
     void acceptOrder(size_t, unsigned short);
+    void declineOrder();
     void finishOrder();
     void acceptPayment();
 

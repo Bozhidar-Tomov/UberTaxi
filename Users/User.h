@@ -52,7 +52,7 @@ public:
     bool hasOrder() const noexcept;
 
     void addMessage(MyString &&) noexcept;
-    void printMessages() const noexcept;
+    void getMessages() const noexcept;
     // void logout();
     // void deleteAccount(const MyVector<MyString> &, const MyVector<MyString> &, int *);
 
