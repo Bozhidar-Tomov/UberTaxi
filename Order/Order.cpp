@@ -82,6 +82,11 @@ bool Order::isFinished() const noexcept
   return _status == OrderStatus::Finished;
 }
 
+bool Order::isFinalized() const noexcept
+{
+  return _status == OrderStatus::Finalized;
+}
+
 void Order::setCost(double cost) noexcept
 {
   _cost = cost;

@@ -23,6 +23,9 @@ int main()
     driver->acceptOrder(1, 25);
     driver->finishOrder();
 
+    client->rateDriver(3);
+    client->pay();
+
     sys.saveData();
 
     // driver->declineOrder(1);

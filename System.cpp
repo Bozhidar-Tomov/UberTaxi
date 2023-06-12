@@ -266,11 +266,15 @@ void System::finishOrder(SharedPtr<Order> order)
     throw std::domain_error("Order not found in the system.");
 }
 
-// TODO call when payment is made/accepted
 void System::releaseOrder(SharedPtr<Order> order)
 {
     order->accessDriver()->removeOrder();
     order->accessClient()->removeOrder();
+}
+
+void System::addProfit(double profit)
+{
+    this->profit += profit;
 }
 
 void System::markOrderInProgress(size_t orderID)

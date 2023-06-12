@@ -66,7 +66,23 @@ void Client::pay()
         _currentOrder->changeStatus(OrderStatus::Finalized);
         _moneyAvailable -= _currentOrder->getCost();
         _currentOrder->accessDriver()->addMoney(_currentOrder->getCost());
+        _sys->addProfit(_currentOrder->getCost());
+        _sys->releaseOrder(_currentOrder);
     }
+}
+
+void Client::rateDriver(unsigned short rating)
+{
+    if (!_currentOrder)
+        throw std::runtime_error("No current order.");
+
+    if (_currentOrder->isFinished())
+    {
+        _currentOrder->accessDriver()->addRating(rating);
+        return;
+    }
+
+    throw std::runtime_error("Cannot rate driver before current order is finalized.");
 }
 
 std::ostream &operator<<(std::ostream &out, const Client &obj)

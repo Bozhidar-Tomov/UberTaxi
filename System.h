@@ -25,6 +25,8 @@ class System
     MyVector<SharedPtr<Order>> inProgressOrders;
     MyVector<SharedPtr<Order>> finishedOrders;
 
+    double profit = 0;
+
 public:
     void loadData();
     void saveData();
@@ -35,6 +37,8 @@ public:
 
     void finishOrder(SharedPtr<Order>);
     void releaseOrder(SharedPtr<Order>);
+
+    void addProfit(double);
 
     void markOrderInProgress(size_t id);
 

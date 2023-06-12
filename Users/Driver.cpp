@@ -112,18 +112,32 @@ void Driver::finishOrder()
     _sys->finishOrder(_currentOrder);
 }
 
+void Driver::addRating(double rating)
+{
+    _rating.addRating(rating);
+}
+
 std::ostream &operator<<(std::ostream &out, const Driver &obj)
 {
     if (&out == &std::cout)
-    {
         return out << static_cast<const User &>(obj) << std::endl
                    << "Plate Number: " << obj._plateNumber << std::endl
-                   << "Phone Number: " << obj._phoneNumber;
-    }
+                   << "Phone Number: " << obj._phoneNumber << std::endl
+                   << "Rating: " << obj._rating;
+
     return out << (const User &)obj << DELIM
                << obj._phoneNumber << DELIM
                << obj._plateNumber << DELIM
-               << obj._chargePerKm;
+               << obj._chargePerKm << DELIM
+               << obj._rating;
+}
+
+std::ostream &operator<<(std::ostream &out, const Driver::Rating &obj)
+{
+    if (&out == &std::cout)
+        return out << obj._rating;
+
+    return out << obj._rating << DELIM << obj._count;
 }
 
 std::istream &operator>>(std::istream &in, Driver &obj)
@@ -140,5 +154,25 @@ std::istream &operator>>(std::istream &in, Driver &obj)
     in.getline(buff, BUFF_SIZE, DELIM);
     obj.setChargePerKm(strToDouble(buff));
 
+    in >> obj._rating;
+
     return in;
+}
+
+std::istream &operator>>(std::istream &in, Driver::Rating &obj)
+{
+    static char buff[BUFF_SIZE];
+
+    in.getline(buff, BUFF_SIZE, DELIM);
+    obj._rating = strToDouble(buff);
+
+    in.getline(buff, BUFF_SIZE, DELIM);
+    obj._count = strToSize_t(buff);
+
+    return in;
+}
+
+void Driver::Rating::addRating(double rating)
+{
+    _rating = (_rating * _count + rating) / ++_count;
 }

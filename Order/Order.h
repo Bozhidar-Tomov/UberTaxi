@@ -55,11 +55,12 @@ public:
     void assignDriver(Driver *) noexcept;
     void updateArriveTime(unsigned short) noexcept;
 
-    void changeStatus(OrderStatus status) noexcept;
+    void changeStatus(OrderStatus) noexcept;
 
     bool isPending() const noexcept;
     bool isInProgress() const noexcept;
     bool isFinished() const noexcept;
+    bool isFinalized() const noexcept;
 
     void setCost(double) noexcept;
     double getCost() const noexcept;

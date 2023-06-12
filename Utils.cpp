@@ -12,9 +12,9 @@ double absolute(double x) noexcept
     return x < 0 ? -x : x;
 }
 
-int strToInt(const char *str) noexcept
+size_t strToSize_t(const char *str) noexcept
 {
-    int x = 0;
+    size_t x = 0;
     bool isNegative = (*str == '-');
 
     if (isNegative)

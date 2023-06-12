@@ -5,12 +5,19 @@
 
 class Driver : public User
 {
+    struct Rating
+    {
+        double _rating = 0;
+        size_t _count = 0;
+
+        void addRating(double);
+    };
+
     Address _currAddress;
     MyString _phoneNumber;
     MyString _plateNumber;
     MyVector<SharedPtr<Order>> _upcomingOrders;
-    // TODO rating
-    double _rating;
+    Rating _rating;
 
     double _chargePerKm = 1;
 
@@ -36,8 +43,11 @@ public:
     void acceptOrder(size_t, unsigned short);
     void declineOrder(size_t);
     void finishOrder();
-    void acceptPayment();
+    void addRating(double);
 
     friend std::ostream &operator<<(std::ostream &, const Driver &);
+    friend std::ostream &operator<<(std::ostream &, const Driver::Rating &);
+
     friend std::istream &operator>>(std::istream &, Driver &);
+    friend std::istream &operator>>(std::istream &, Driver::Rating &);
 };

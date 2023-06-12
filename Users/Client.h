@@ -15,7 +15,7 @@ public:
     void checkOrder() const;
     void cancelOrder();
     void pay();
-    void rateDriver();
+    void rateDriver(unsigned short);
     void addMoney();
 
     friend std::ostream &operator<<(std::ostream &, const Client &);
