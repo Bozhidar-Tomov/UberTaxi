@@ -82,7 +82,9 @@ operator<<(std::ostream &out, const User &obj)
     if (&out == &std::cout)
         return out << "Name: " << obj._name;
 
-    return out << obj._name << DELIM << obj._password << DELIM << obj._moneyAvailable;
+    return out << obj._name << DELIM
+               << obj._password << DELIM
+               << obj._moneyAvailable;
 }
 
 std::istream &operator>>(std::istream &in, User &obj)

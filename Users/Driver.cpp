@@ -7,14 +7,16 @@
 #include "../Utils.h"
 
 Driver::Driver(const MyString &name, const MyString &password, double moneyAvailable,
-               const Address &address, const MyString &phoneNumber, const MyString &plateNumber)
+               const Address &address, const MyString &phoneNumber, const MyString &plateNumber, double chargePerKm)
     : User(name, password, moneyAvailable),
-      _currAddress(address), _phoneNumber(phoneNumber), _plateNumber(plateNumber) {}
+      _currAddress(address), _phoneNumber(phoneNumber), _plateNumber(plateNumber),
+      _chargePerKm(chargePerKm) {}
 
 Driver::Driver(MyString &&name, MyString &&password, double moneyAvailable,
-               Address &&address, MyString &&phoneNumber, MyString &&plateNumber) noexcept
+               Address &&address, MyString &&phoneNumber, MyString &&plateNumber, double chargePerKm) noexcept
     : User(std::move(name), std::move(password), moneyAvailable),
-      _currAddress(std::move(address)), _phoneNumber(std::move(phoneNumber)), _plateNumber(std::move(plateNumber)) {}
+      _currAddress(std::move(address)), _phoneNumber(std::move(phoneNumber)), _plateNumber(std::move(plateNumber)),
+      _chargePerKm(chargePerKm) {}
 
 void Driver::setPhoneNumber(const char *phoneNumber)
 {
@@ -24,6 +26,11 @@ void Driver::setPhoneNumber(const char *phoneNumber)
 void Driver::setPlateNumber(const char *plateNumber)
 {
     _plateNumber = std::move(MyString(plateNumber));
+}
+
+void Driver::setChargePerKm(double chargePerKm)
+{
+    _chargePerKm = chargePerKm;
 }
 
 void Driver::changeCurrAddress(const Address &currAddress)
@@ -99,6 +106,13 @@ void Driver::declineOrder(size_t orderID)
             }
 }
 
+void Driver::finishOrder()
+{
+    _currentOrder->setCost(_currentOrder->getPickupAddress().getDist(_currentOrder->getDestAddress()) * _chargePerKm);
+    _currAddress = _currentOrder->getDestAddress();
+    _sys->finishOrder(_currentOrder);
+}
+
 std::ostream &operator<<(std::ostream &out, const Driver &obj)
 {
     if (&out == &std::cout)
@@ -107,19 +121,25 @@ std::ostream &operator<<(std::ostream &out, const Driver &obj)
                    << "Plate Number: " << obj._plateNumber << std::endl
                    << "Phone Number: " << obj._phoneNumber;
     }
-    return out << (const User &)obj << DELIM << obj._phoneNumber << DELIM << obj._plateNumber;
+    return out << (const User &)obj << DELIM
+               << obj._phoneNumber << DELIM
+               << obj._plateNumber << DELIM
+               << obj._chargePerKm;
 }
 
 std::istream &operator>>(std::istream &in, Driver &obj)
 {
     in >> static_cast<User &>(obj);
-    char buff[BUFF_SIZE];
+    static char buff[BUFF_SIZE];
 
     in.getline(buff, BUFF_SIZE, DELIM);
     obj.setPhoneNumber(buff);
 
     in.getline(buff, BUFF_SIZE, DELIM);
     obj.setPlateNumber(buff);
+
+    in.getline(buff, BUFF_SIZE, DELIM);
+    obj.setChargePerKm(strToDouble(buff));
 
     return in;
 }

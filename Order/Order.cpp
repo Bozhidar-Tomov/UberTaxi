@@ -1,4 +1,5 @@
 #include "Order.h"
+#include "../constants.h"
 
 Order::Order(const Address &address, const Address &dest,
              Client *client,
@@ -42,6 +43,14 @@ Driver *Order::accessDriver()
 {
   return _driver;
 }
+const Client *Order::getClient() const noexcept
+{
+  return _client;
+}
+Client *Order::accessClient()
+{
+  return _client;
+}
 
 void Order::assignDriver(Driver *driver) noexcept
 {
@@ -58,10 +67,37 @@ bool Order::isInProgress() const noexcept
   return (bool)_driver;
 }
 
+// TODO add enum
+bool Order::isFinished() const noexcept
+{
+  return _cost != 0;
+}
+
+void Order::setCost(double cost) noexcept
+{
+  _cost = cost;
+}
+
+double Order::getCost() const noexcept
+{
+  return _cost;
+}
+
 std::ostream &operator<<(std::ostream &out, const Order &obj)
 {
-  return out << "ID --> " << obj._id << '\n'
-             << "Pickup address --> " << obj._pickupAddress << '\n'
-             << "Destination --> " << obj._destAddress << '\n'
-             << "Number of passengers --> " << int16_t(obj._passengerCount);
+  if (&out == &std::cout)
+    return out << "ID --> " << obj._id << '\n'
+               << "Pickup address --> " << obj._pickupAddress << '\n'
+               << "Destination --> " << obj._destAddress << '\n'
+               << "Number of passengers --> " << int16_t(obj._passengerCount);
+
+  return out << obj._id << DELIM
+             << obj._pickupAddress << DELIM
+             << obj._destAddress << DELIM
+             << int16_t(obj._passengerCount) << DELIM
+             << obj._cost;
+  // FIXME
+  // cannot << obj.driver because it is forward-declared.
+  // << obj._driver << DELIM
+  // << *(obj._client);
 }

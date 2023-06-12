@@ -114,10 +114,10 @@ namespace
 
 void System::loadData()
 {
-    std::ifstream file(CLIENT_DATA_FILE_DIR, std::ios::in);
+    std::ifstream file(CLIENTS_DATA_FILE_DIR, std::ios::in);
 
     if (!file.is_open())
-        throw file_stream_error("Cannot open file!", CLIENT_DATA_FILE_DIR);
+        throw file_stream_error("Cannot open file!", CLIENTS_DATA_FILE_DIR);
 
     std::stringstream ss;
     char line[BUFF_SIZE];
@@ -137,10 +137,10 @@ void System::loadData()
 
     file.close();
 
-    file.open(DRIVER_DATA_FILE_DIR, std::ios::in);
+    file.open(DRIVERS_DATA_FILE_DIR, std::ios::in);
 
     if (!file.is_open())
-        throw file_stream_error("Cannot open file!", DRIVER_DATA_FILE_DIR);
+        throw file_stream_error("Cannot open file!", DRIVERS_DATA_FILE_DIR);
 
     while (!file.eof() && file.getline(line, BUFF_SIZE))
     {
@@ -160,25 +160,32 @@ void System::loadData()
 
 void System::saveData()
 {
-    std::ofstream file(CLIENT_DATA_FILE_DIR, std::ios::out);
+    std::ofstream file(CLIENTS_DATA_FILE_DIR, std::ios::out);
 
     if (!file.is_open())
-        throw file_stream_error("Cannot open file!", CLIENT_DATA_FILE_DIR);
+        throw file_stream_error("Cannot open file!", CLIENTS_DATA_FILE_DIR);
 
     for (size_t i = 0; i < clients.size(); ++i)
         file << *clients[i] << '\n';
 
     file.close();
 
-    file.open(DRIVER_DATA_FILE_DIR, std::ios::out);
+    file.open(DRIVERS_DATA_FILE_DIR, std::ios::out);
 
     if (!file.is_open())
-        throw file_stream_error("Cannot open file!", DRIVER_DATA_FILE_DIR);
+        throw file_stream_error("Cannot open file!", DRIVERS_DATA_FILE_DIR);
 
     for (size_t i = 0; i < drivers.size(); ++i)
         file << *drivers[i] << '\n';
 
     file.close();
+
+    file.open(ORDERS_DATA_FILE_DIR, std::ios::app);
+    if (!file.is_open())
+        throw file_stream_error("Cannot open file!", ORDERS_DATA_FILE_DIR);
+
+    for (size_t i = 0; i < finishedOrders.size(); ++i)
+        file << *finishedOrders[i] << '\n';
 }
 
 void System::addOrder(SharedPtr<Order> order)
@@ -215,7 +222,7 @@ void System::notifyClosestDriver(SharedPtr<Order> order, Driver *excludedDriver)
     drivers.at(idxClosestDriver)->addOrder(order);
 }
 
-void System::removeOrder(SharedPtr<Order> order)
+void System::removeOrder_clientCall(SharedPtr<Order> order) // experimental
 {
     bool orderFound = false;
     if (order->isInProgress())
@@ -248,6 +255,25 @@ void System::removeOrder(SharedPtr<Order> order)
 
     if (!orderFound)
         throw std::domain_error("Order not found in the system.");
+}
+void System::finishOrder(SharedPtr<Order> order)
+{
+    for (size_t i = 0; i < inProgressOrders.size(); ++i)
+        if (inProgressOrders[i]->getID() == order->getID())
+        {
+            inProgressOrders.pop_at(i);
+            finishedOrders.push_back(order);
+            return;
+        }
+
+    throw std::domain_error("Order not found in the system.");
+}
+
+// TODO call when payment is made/accepted
+void System::releaseOrder(SharedPtr<Order> order)
+{
+    order->accessDriver()->removeOrder();
+    order->accessClient()->removeOrder();
 }
 
 void System::markOrderInProgress(size_t id)
@@ -300,7 +326,7 @@ SharedPtr<Client> System::registerClient(const char *name, const char *password,
     return clients[clients.size() - 1];
 }
 
-SharedPtr<Driver> System::registerDriver(const char *name, const char *password, const char *phoneNumber, const char *plateNumber, double moneyAvailable)
+SharedPtr<Driver> System::registerDriver(const char *name, const char *password, const char *phoneNumber, const char *plateNumber, double moneyAvailable, double chargePerKm)
 {
     for (size_t i = 0; i < drivers.size(); ++i)
         if (drivers[i]->getName() == name)
@@ -309,6 +335,6 @@ SharedPtr<Driver> System::registerDriver(const char *name, const char *password,
     if (!validateUsername(name) || !validatePassword(password))
         return SharedPtr<Driver>();
 
-    drivers.push_back(SharedPtr<Driver>(new Driver(MyString(name), MyString(password), moneyAvailable, Address(), MyString(phoneNumber), MyString(plateNumber))));
+    drivers.push_back(SharedPtr<Driver>(new Driver(MyString(name), MyString(password), moneyAvailable, Address(), MyString(phoneNumber), MyString(plateNumber), chargePerKm)));
     return drivers[drivers.size() - 1];
 }

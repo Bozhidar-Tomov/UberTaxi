@@ -38,9 +38,11 @@ public:
     void setName(MyString &&);
     const MyString &getName() const noexcept;
 
+    // TODO should be private
     void setPassword(const MyString &);
     void setPassword(MyString &&);
     const MyString &getPassword() const noexcept;
+    //==============================
 
     void setMoneyAvailable(double) noexcept;
     double getMoneyAvailable() const noexcept;

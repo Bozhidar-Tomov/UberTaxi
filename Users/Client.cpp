@@ -46,7 +46,7 @@ void Client::cancelOrder()
     if (!_currentOrder.get())
         throw std::runtime_error("There is no active order.");
 
-    _sys->removeOrder(_currentOrder);
+    _sys->removeOrder_clientCall(_currentOrder);
 }
 
 std::ostream &operator<<(std::ostream &out, const Client &obj)

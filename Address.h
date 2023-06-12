@@ -1,6 +1,7 @@
 #pragma once
 #include <math.h>
 #include "MyString/MyString.h"
+#include <iostream>
 
 class Address
 {
@@ -12,13 +13,7 @@ class Address
         Point() = default;
         Point(double x, double y) : _x(x), _y(y) {}
 
-        double getDist(const Point &other) const noexcept
-        {
-            double dx = _x - other._x;
-            double dy = _y - other._y;
-
-            return sqrt(dx * dx + dy * dy);
-        }
+        double getDist(const Point &other) const noexcept;
     };
 
     MyString _name;
@@ -34,4 +29,5 @@ public:
     double getDist(const Address &) const noexcept;
 
     friend std::ostream &operator<<(std::ostream &, const Address &);
+    friend std::ostream &operator<<(std::ostream &, const Address::Point &);
 };

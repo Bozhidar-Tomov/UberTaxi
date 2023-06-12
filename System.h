@@ -23,6 +23,7 @@ class System
     // IDEA: leave it as pointers since a lot of change is happening
     MyVector<SharedPtr<Order>> pendingOrders;
     MyVector<SharedPtr<Order>> inProgressOrders;
+    MyVector<SharedPtr<Order>> finishedOrders;
 
 public:
     void loadData();
@@ -30,7 +31,10 @@ public:
 
     void addOrder(SharedPtr<Order>);
     void notifyClosestDriver(SharedPtr<Order>, Driver *excludedDriver = nullptr);
-    void removeOrder(SharedPtr<Order>);
+    void removeOrder_clientCall(SharedPtr<Order>); // experimental
+
+    void finishOrder(SharedPtr<Order>);
+    void releaseOrder(SharedPtr<Order>);
 
     void markOrderInProgress(size_t id);
 
@@ -38,5 +42,5 @@ public:
     SharedPtr<Driver> loginDriver(const char *username, const char *password);
 
     SharedPtr<Client> registerClient(const char *username, const char *password, double moneyAvailable = 0);
-    SharedPtr<Driver> registerDriver(const char *username, const char *password, const char *phoneNumber, const char *plateNumber, double moneyAvailable = 0);
+    SharedPtr<Driver> registerDriver(const char *username, const char *password, const char *phoneNumber, const char *plateNumber, double moneyAvailable = 0, double chargePerKm = 1);
 };

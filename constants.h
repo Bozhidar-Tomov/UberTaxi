@@ -1,7 +1,8 @@
 #pragma once
 
-const char CLIENT_DATA_FILE_DIR[] = "Data/clientData.txt";
-const char DRIVER_DATA_FILE_DIR[] = "Data/driverData.txt";
+const char CLIENTS_DATA_FILE_DIR[] = "Data/clientsData.txt";
+const char DRIVERS_DATA_FILE_DIR[] = "Data/driversData.txt";
+const char ORDERS_DATA_FILE_DIR[] = "Data/ordersData.txt";
 const char LINE_SEPARATOR[] = "---------------------------------------------------------------------";
 const unsigned MAX_NAME_LEN = 20;
 const unsigned MIN_NAME_LEN = 3;

@@ -12,16 +12,19 @@ class Driver : public User
     // TODO rating
     double _rating;
 
+    double _chargePerKm = 1;
+
 public:
     Driver() = default;
     Driver(const MyString &, const MyString &, double,
-           const Address &, const MyString &, const MyString &);
+           const Address &, const MyString &, const MyString &, double);
 
     Driver(MyString &&, MyString &&, double,
-           Address &&, MyString &&, MyString &&) noexcept;
+           Address &&, MyString &&, MyString &&, double) noexcept;
 
     void setPhoneNumber(const char *);
     void setPlateNumber(const char *);
+    void setChargePerKm(double);
 
     void changeCurrAddress(const Address &);
     void changeCurrAddress(Address &&) noexcept;
