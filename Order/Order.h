@@ -13,6 +13,7 @@ enum class OrderStatus
     InProgress,
     Finished,
     Canceled,
+    Finalized,
 };
 
 class Order

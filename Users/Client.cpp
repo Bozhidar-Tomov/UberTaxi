@@ -49,6 +49,26 @@ void Client::cancelOrder()
     _sys->removeOrder_clientCall(_currentOrder);
 }
 
+void Client::pay()
+{
+    // TODO add money to driver and update statistics
+    if (_currentOrder->isInProgress())
+        throw std::runtime_error("Order is still in progress. Wait for driver to mark it as finished");
+
+    if (_currentOrder->isPending())
+        throw std::runtime_error("Order is pending. Paying in advance is not allowed.");
+
+    if (_currentOrder->isFinished())
+    {
+        if (_moneyAvailable < _currentOrder->getCost())
+            throw std::runtime_error("Not enough balance to make a payment!");
+
+        _currentOrder->changeStatus(OrderStatus::Finalized);
+        _moneyAvailable -= _currentOrder->getCost();
+        _currentOrder->accessDriver()->addMoney(_currentOrder->getCost());
+    }
+}
+
 std::ostream &operator<<(std::ostream &out, const Client &obj)
 {
     return out << static_cast<const User &>(obj);

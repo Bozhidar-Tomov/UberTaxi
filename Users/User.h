@@ -46,6 +46,7 @@ public:
 
     void setMoneyAvailable(double) noexcept;
     double getMoneyAvailable() const noexcept;
+    double addMoney(double) noexcept;
 
     void loadSystemPtr(System *) noexcept;
 

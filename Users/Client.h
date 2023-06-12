@@ -14,8 +14,8 @@ public:
     void order(Address &&, Address &&, uint8_t);
     void checkOrder() const;
     void cancelOrder();
-    void payOrder();
-    void reteDriver();
+    void pay();
+    void rateDriver();
     void addMoney();
 
     friend std::ostream &operator<<(std::ostream &, const Client &);

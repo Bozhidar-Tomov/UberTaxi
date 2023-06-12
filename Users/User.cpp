@@ -46,6 +46,11 @@ double User::getMoneyAvailable() const noexcept
     return _moneyAvailable;
 }
 
+double User::addMoney(double amount) noexcept
+{
+    return _moneyAvailable += amount;
+}
+
 void User::addOrder(SharedPtr<Order> order)
 {
     _currentOrder = order;
