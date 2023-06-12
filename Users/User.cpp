@@ -2,11 +2,11 @@
 #include "../constants.h"
 #include "../Utils.h"
 
-User::User(const MyString &userName, const MyString &password, double moneyAvailable)
-    : _name(userName), _password(password), _moneyAvailable(moneyAvailable) {}
+User::User(const MyString &name, const MyString &password, double moneyAvailable)
+    : _name(name), _password(password), _moneyAvailable(moneyAvailable) {}
 
-User::User(MyString &&userName, MyString &&password, double moneyAvailable)
-    : _name(std::move(userName)), _password(std::move(password)), _moneyAvailable(moneyAvailable) {}
+User::User(MyString &&name, MyString &&password, double moneyAvailable)
+    : _name(std::move(name)), _password(std::move(password)), _moneyAvailable(moneyAvailable) {}
 
 void User::setName(const MyString &name)
 {

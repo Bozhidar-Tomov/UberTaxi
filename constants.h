@@ -3,6 +3,7 @@
 const char CLIENTS_DATA_FILE_DIR[] = "Data/clientsData.txt";
 const char DRIVERS_DATA_FILE_DIR[] = "Data/driversData.txt";
 const char ORDERS_DATA_FILE_DIR[] = "Data/ordersData.txt";
+const char STATISTICS_DATA_FILE_DIR[] = "Data/statisticsData.dat";
 const char LINE_SEPARATOR[] = "---------------------------------------------------------------------";
 const unsigned MAX_NAME_LEN = 20;
 const unsigned MIN_NAME_LEN = 3;

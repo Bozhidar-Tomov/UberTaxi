@@ -33,23 +33,23 @@ namespace
         return (ch == ' ');
     };
 
-    bool validateUsername(const char *username)
+    bool validateName(const char *name)
     {
-        const char *begin = username;
+        const char *begin = name;
 
-        if (!username || !*username || !isUpper(*username))
+        if (!name || !*name || !isUpper(*name))
             return false;
 
-        while (isAlpha(*(++username)))
+        while (isAlpha(*(++name)))
             ;
 
-        if (!isSpace(*username))
+        if (!isSpace(*name))
             return false;
 
-        while (!isAlpha(*(++username)))
+        while (!isAlpha(*(++name)))
             ;
 
-        if (username - begin > MAX_NAME_LEN || username - begin < MIN_NAME_LEN)
+        if (name - begin > MAX_NAME_LEN || name - begin < MIN_NAME_LEN)
             return false;
 
         return true;
@@ -87,19 +87,20 @@ namespace
         return hasDigit && hasUpper && hasLower && hasSymbol;
     }
 
-    size_t binarySearch(MyVector<SharedPtr<Order>> &orders, size_t id)
+    template <typename T>
+    size_t binarySearch(T &container, size_t id)
     {
         size_t low = 0;
-        size_t high = orders.size() - 1;
+        size_t high = container.size() - 1;
 
         while (low <= high)
         {
             size_t mid = low + (high - low) / 2;
 
-            if (orders[mid]->getID() == id)
+            if (container[mid]->getID() == id)
                 return mid;
 
-            if (orders[mid]->getID() < id)
+            if (container[mid]->getID() < id)
                 low = mid + 1;
             else
             {
@@ -156,6 +157,15 @@ void System::loadData()
     }
 
     file.close();
+
+    file.open(STATISTICS_DATA_FILE_DIR, std::ios::binary);
+
+    file.read(reinterpret_cast<char *>(&profit), sizeof(profit));
+    file.read(reinterpret_cast<char *>(&driversCount), sizeof(driversCount));
+    file.read(reinterpret_cast<char *>(&clientsCount), sizeof(clientsCount));
+    file.read(reinterpret_cast<char *>(&ordersCount), sizeof(ordersCount));
+
+    file.close();
 }
 
 void System::saveData()
@@ -186,6 +196,19 @@ void System::saveData()
 
     for (size_t i = 0; i < finishedOrders.size(); ++i)
         file << *finishedOrders[i] << '\n';
+
+    file.close();
+
+    file.open(STATISTICS_DATA_FILE_DIR, std::ios::binary);
+    if (!file.is_open())
+        throw file_stream_error("Cannot open file!", ORDERS_DATA_FILE_DIR);
+
+    file.write(reinterpret_cast<const char *>(&profit), sizeof(profit));
+    file.write(reinterpret_cast<const char *>(&driversCount), sizeof(driversCount));
+    file.write(reinterpret_cast<const char *>(&clientsCount), sizeof(clientsCount));
+    file.write(reinterpret_cast<const char *>(&ordersCount), sizeof(ordersCount));
+
+    file.close();
 }
 
 void System::addOrder(SharedPtr<Order> order)
@@ -260,6 +283,7 @@ void System::finishOrder(SharedPtr<Order> order)
         {
             inProgressOrders.pop_at(i);
             finishedOrders.push_back(order);
+            ++ordersCount;
             return;
         }
 
@@ -298,9 +322,10 @@ SharedPtr<Client> System::loginClient(const char *name, const char *password)
 
         if (clients[i]->getPassword() == password)
             return clients[i];
-    }
 
-    return SharedPtr<Client>();
+        std::invalid_argument("Wrong password.");
+    }
+    throw std::invalid_argument("Client with this name not found.");
 }
 SharedPtr<Driver> System::loginDriver(const char *name, const char *password)
 {
@@ -311,8 +336,10 @@ SharedPtr<Driver> System::loginDriver(const char *name, const char *password)
 
         if (drivers[i]->getPassword() == password)
             return drivers[i];
+
+        std::invalid_argument("Wrong password.");
     }
-    return SharedPtr<Driver>();
+    throw std::invalid_argument("Driver with this name not found.");
 }
 
 SharedPtr<Client> System::registerClient(const char *name, const char *password, double moneyAvailable)
@@ -321,22 +348,30 @@ SharedPtr<Client> System::registerClient(const char *name, const char *password,
         if (clients[i]->getName() == name)
             return SharedPtr<Client>();
 
-    if (!validateUsername(name) || !validatePassword(password))
+    if (!validateName(name) || !validatePassword(password))
         return SharedPtr<Client>();
 
     clients.push_back(SharedPtr<Client>(new Client(MyString(name), MyString(password), moneyAvailable)));
+    ++clientsCount;
+
     return clients[clients.size() - 1];
 }
 
-SharedPtr<Driver> System::registerDriver(const char *name, const char *password, const char *phoneNumber, const char *plateNumber, double moneyAvailable, double chargePerKm)
+SharedPtr<Driver> System::registerDriver(const char *name, const char *password, const char *phoneNumber,
+                                         const char *plateNumber, double moneyAvailable, double chargePerKm)
 {
     for (size_t i = 0; i < drivers.size(); ++i)
         if (drivers[i]->getName() == name)
-            return SharedPtr<Driver>();
+            throw std::logic_error("Driver with this name already exists.");
 
-    if (!validateUsername(name) || !validatePassword(password))
-        return SharedPtr<Driver>();
+    if (!validateName(name) || !validatePassword(password))
+        throw std::invalid_argument("Invalid name or password");
 
-    drivers.push_back(SharedPtr<Driver>(new Driver(MyString(name), MyString(password), moneyAvailable, Address(), MyString(phoneNumber), MyString(plateNumber), chargePerKm)));
+    drivers.push_back(SharedPtr<Driver>(
+        new Driver(MyString(name), MyString(password), moneyAvailable,
+                   Address(), MyString(phoneNumber), MyString(plateNumber), chargePerKm)));
+    // BUG add system pointer to the newly created user
+    ++driversCount;
+
     return drivers[drivers.size() - 1];
 }

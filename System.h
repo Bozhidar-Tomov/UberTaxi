@@ -26,6 +26,9 @@ class System
     MyVector<SharedPtr<Order>> finishedOrders;
 
     double profit = 0;
+    size_t driversCount = 0;
+    size_t clientsCount = 0;
+    size_t ordersCount = 0;
 
 public:
     void loadData();
@@ -42,9 +45,9 @@ public:
 
     void markOrderInProgress(size_t id);
 
-    SharedPtr<Client> loginClient(const char *username, const char *password);
-    SharedPtr<Driver> loginDriver(const char *username, const char *password);
+    SharedPtr<Client> loginClient(const char *name, const char *password);
+    SharedPtr<Driver> loginDriver(const char *name, const char *password);
 
-    SharedPtr<Client> registerClient(const char *username, const char *password, double moneyAvailable = 0);
-    SharedPtr<Driver> registerDriver(const char *username, const char *password, const char *phoneNumber, const char *plateNumber, double moneyAvailable = 0, double chargePerKm = 1);
+    SharedPtr<Client> registerClient(const char *name, const char *password, double moneyAvailable = 0);
+    SharedPtr<Driver> registerDriver(const char *name, const char *password, const char *phoneNumber, const char *plateNumber, double moneyAvailable = 0, double chargePerKm = 1);
 };
