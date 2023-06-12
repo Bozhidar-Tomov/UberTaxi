@@ -127,7 +127,7 @@ inline void MyVector<T>::pop_back()
     if (empty())
         throw std::range_error("Container is empty");
 
-    --_size;
+    _data[--_size].~T();
 }
 
 template <typename T>
@@ -139,7 +139,7 @@ inline void MyVector<T>::pop_at(size_t idx)
     for (size_t i = idx; i < _size - 1; ++i)
         new (_data + i) T(std::move(_data[i + 1]));
 
-    --_size;
+    _data[--_size].~T();
 }
 
 template <typename T>
