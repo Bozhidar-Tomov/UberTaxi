@@ -2,7 +2,6 @@
 #include "../constants.h"
 #include "../System.h"
 #include "../PriorityQueue/PriorityQueue.h"
-// #include <float.h> // including DBL_MAX
 #include <iostream>
 #include "../Utils.h"
 
@@ -60,7 +59,7 @@ void Driver::addOrder(SharedPtr<Order> order)
     _upcomingOrders.push_back(order);
 }
 
-void Driver::acceptOrder(size_t id, unsigned short minutes)
+void Driver::acceptOrder(size_t orderID, unsigned short minutes)
 {
     if (_currentOrder.get())
         throw std::logic_error(
@@ -70,7 +69,7 @@ void Driver::acceptOrder(size_t id, unsigned short minutes)
 
     for (size_t i = 0; i < _upcomingOrders.size(); ++i)
     {
-        if (_upcomingOrders[i]->getID() == id)
+        if (_upcomingOrders[i]->getID() == orderID)
         {
             _upcomingOrders[i]->assignDriver(this);
             _upcomingOrders[i]->updateArriveTime(minutes);
@@ -78,7 +77,7 @@ void Driver::acceptOrder(size_t id, unsigned short minutes)
             _currentOrder = _upcomingOrders[i];
             _upcomingOrders.pop_at(i);
 
-            _sys->markOrderInProgress(id);
+            _sys->markOrderInProgress(orderID);
             return;
         }
     }

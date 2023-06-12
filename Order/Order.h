@@ -7,10 +7,17 @@
 class Driver;
 class Client;
 
+enum class OrderStatus
+{
+    Pending,
+    InProgress,
+    Finished,
+    Canceled,
+};
+
 class Order
 {
     // IDEA store idx as member variable
-    // IDEA add status member variable enum (pending, inProgress, finished)
     Address _pickupAddress;
     Address _destAddress;
 
@@ -22,6 +29,7 @@ class Order
     uint8_t _passengerCount = 0;
 
     unsigned short _arriveIn = 0;
+    OrderStatus _status = OrderStatus::Pending;
 
 public:
     Order(const Address &, const Address &,
@@ -46,6 +54,9 @@ public:
     void assignDriver(Driver *) noexcept;
     void updateArriveTime(unsigned short) noexcept;
 
+    void changeStatus(OrderStatus status) noexcept;
+
+    bool isPending() const noexcept;
     bool isInProgress() const noexcept;
     bool isFinished() const noexcept;
 

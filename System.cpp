@@ -224,13 +224,12 @@ void System::notifyClosestDriver(SharedPtr<Order> order, Driver *excludedDriver)
 
 void System::removeOrder_clientCall(SharedPtr<Order> order) // experimental
 {
-    bool orderFound = false;
     if (order->isInProgress())
-    {
         for (size_t i = 0; i < inProgressOrders.size(); ++i)
             if (inProgressOrders[i]->getID() == order->getID())
             {
                 // Notifying the driver
+                order->changeStatus(OrderStatus::Canceled);
                 order->accessDriver()->removeOrder();
                 order->accessDriver()->addMessage(
                     std::move(MyString("Attention: Order (ID ")
@@ -238,26 +237,24 @@ void System::removeOrder_clientCall(SharedPtr<Order> order) // experimental
                                   .append(") has been canceled!")));
 
                 inProgressOrders.pop_at(i);
-                orderFound = true;
-                break;
+                return;
             }
-    }
-    else
-    {
+
+    if (order->isPending())
         for (size_t i = 0; i < pendingOrders.size(); ++i)
             if (pendingOrders[i]->getID() == order->getID())
             {
+                order->changeStatus(OrderStatus::Canceled);
                 pendingOrders.pop_at(i);
-                orderFound = true;
-                break;
+                return;
             }
-    }
 
-    if (!orderFound)
-        throw std::domain_error("Order not found in the system.");
+    throw std::domain_error("Order not found in the system.");
 }
+
 void System::finishOrder(SharedPtr<Order> order)
 {
+    order->changeStatus(OrderStatus::Finished);
     for (size_t i = 0; i < inProgressOrders.size(); ++i)
         if (inProgressOrders[i]->getID() == order->getID())
         {
@@ -276,13 +273,14 @@ void System::releaseOrder(SharedPtr<Order> order)
     order->accessClient()->removeOrder();
 }
 
-void System::markOrderInProgress(size_t id)
+void System::markOrderInProgress(size_t orderID)
 {
-    size_t idx = binarySearch(pendingOrders, id);
+    size_t idx = binarySearch(pendingOrders, orderID);
 
     if (idx == SIZE_MAX)
         throw std::runtime_error("Order not found in the system.");
 
+    pendingOrders.at(idx)->changeStatus(OrderStatus::InProgress);
     inProgressOrders.push_back(std::move(pendingOrders.at(idx)));
     pendingOrders.pop_at(idx);
 }

@@ -62,15 +62,24 @@ void Order::updateArriveTime(unsigned short minutes) noexcept
   _arriveIn = minutes;
 }
 
-bool Order::isInProgress() const noexcept
+void Order::changeStatus(OrderStatus status) noexcept
 {
-  return (bool)_driver;
+  _status = status;
 }
 
-// TODO add enum
+bool Order::isPending() const noexcept
+{
+  return _status == OrderStatus::Pending;
+}
+
+bool Order::isInProgress() const noexcept
+{
+  return _status == OrderStatus::InProgress;
+}
+
 bool Order::isFinished() const noexcept
 {
-  return _cost != 0;
+  return _status == OrderStatus::Finished;
 }
 
 void Order::setCost(double cost) noexcept
