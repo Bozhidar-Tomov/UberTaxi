@@ -74,6 +74,11 @@ private:
 };
 
 template <typename T>
+bool operator==(const SharedPtr<T> &, const SharedPtr<T> &);
+
+//====================================================================
+
+template <typename T>
 SharedPtr<T>::SharedPtr() : _ptr(nullptr), counter(nullptr) {}
 
 template <typename T>
@@ -234,4 +239,10 @@ inline void SharedPtr<T>::free() noexcept
 
     if (counter->weakCount == 0)
         delete counter;
+}
+
+template <typename T>
+inline bool operator==(const SharedPtr<T> &lhs, const SharedPtr<T> &rhs)
+{
+    return lhs.get() == rhs.get();
 }

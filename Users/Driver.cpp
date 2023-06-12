@@ -78,6 +78,27 @@ void Driver::acceptOrder(size_t id, unsigned short minutes)
     throw std::invalid_argument("Order not found.");
 }
 
+void Driver::declineOrder(size_t orderID)
+{
+    for (size_t i = 0; i < _upcomingOrders.size(); ++i)
+        if (_upcomingOrders[i]->getID() == orderID)
+            try
+            {
+                _sys->notifyClosestDriver(_upcomingOrders[i], this);
+                _upcomingOrders.pop_at(i);
+            }
+            catch (const std::runtime_error &e)
+            {
+                std::cout << e.what() << std::endl
+                          << "Cannot cancel order because you are the only available driver who can take it."
+                          << std::endl;
+            }
+            catch (const std::exception &e)
+            {
+                std::cout << "Cannot decline order. Reason: " << e.what() << std::endl;
+            }
+}
+
 std::ostream &operator<<(std::ostream &out, const Driver &obj)
 {
     if (&out == &std::cout)

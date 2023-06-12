@@ -245,6 +245,16 @@ inline T *MyVector<T>::operator*() const noexcept
 }
 
 template <typename T>
+inline size_t MyVector<T>::find(const T &element) const noexcept
+{
+    for (size_t i = 0; i < _size; ++i)
+        if (_data[i] == element)
+            return i;
+
+    return SIZE_MAX;
+}
+
+template <typename T>
 inline std::ostream &operator<<(std::ostream &out, const MyVector<T> &obj)
 {
     out << '[';

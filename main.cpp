@@ -20,12 +20,12 @@ int main()
 
     SharedPtr<Driver> driver = sys.loginDriver("new name", "P@ssword1");
 
-    // driver->checkAvailableOrders();
-    driver->acceptOrder(1, 25);
-
+    driver->checkAvailableOrders();
+    // driver->acceptOrder(1, 25);
+    driver->declineOrder(1);
     client->checkOrder();
     client->cancelOrder();
-    driver->printMessages();
+    driver->getMessages();
 
     // for (int i = 0; i < sys.inProgressOrders.size(); ++i)
     // {

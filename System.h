@@ -29,6 +29,7 @@ public:
     void saveData();
 
     void addOrder(SharedPtr<Order>);
+    void notifyClosestDriver(SharedPtr<Order>, Driver *excludedDriver = nullptr);
     void removeOrder(SharedPtr<Order>);
 
     void markOrderInProgress(size_t id);

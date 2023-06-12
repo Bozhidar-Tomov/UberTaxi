@@ -183,22 +183,35 @@ void System::saveData()
 
 void System::addOrder(SharedPtr<Order> order)
 {
-    double closestDist = DBL_MAX;
-    size_t idxClosestDriver = SIZE_MAX;
-
     if (drivers.empty())
         throw std::runtime_error("No drivers available.");
 
+    pendingOrders.push_back(order);
+    notifyClosestDriver(order);
+}
+
+void System::notifyClosestDriver(SharedPtr<Order> order, Driver *excludedDriver)
+{
+    double closestDist = DBL_MAX;
+    static double dist = DBL_MAX;
+    size_t idxClosestDriver = SIZE_MAX;
+
     for (size_t i = 0; i < drivers.size(); ++i)
     {
-        static double dist = drivers[i]->getAddress().getDist(order->getPickupAddress());
+        if (excludedDriver && drivers[i].get() == excludedDriver)
+            continue;
+
+        dist = drivers[i]->getAddress().getDist(order->getPickupAddress());
         if (dist < closestDist)
         {
             closestDist = dist;
             idxClosestDriver = i;
         }
     }
-    pendingOrders.push_back(order);
+
+    if (idxClosestDriver == SIZE_MAX)
+        throw std::runtime_error("No drivers available.");
+
     drivers.at(idxClosestDriver)->addOrder(order);
 }
 

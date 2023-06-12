@@ -62,6 +62,8 @@ public:
     T *data() const noexcept;
     T *operator*() const noexcept;
 
+    size_t find(const T &) const noexcept;
+
     template <typename U>
     friend std::ostream &operator<<(std::ostream &, const MyVector<U> &);
 
