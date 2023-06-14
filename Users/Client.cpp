@@ -2,6 +2,9 @@
 #include "../System.h"
 #include "../constants.h"
 
+Client::Client(const MyString &name, const MyString &password, double moneyAvailable, System *sys)
+    : User(name, password, moneyAvailable, sys) {}
+
 Client::Client(MyString &&name, MyString &&password, double moneyAvailable, System *sys)
     : User(std::move(name), std::move(password), moneyAvailable, sys) {}
 
@@ -80,6 +83,11 @@ void Client::rateDriver(unsigned short rating)
     }
 
     throw std::runtime_error("Cannot rate driver before current order is finalized.");
+}
+
+void Client::addMoney(double amount) noexcept
+{
+    _moneyAvailable += amount;
 }
 
 std::ostream &operator<<(std::ostream &out, const Client &obj)

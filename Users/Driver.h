@@ -23,6 +23,7 @@ class Driver : public User
 
 public:
     Driver() = default;
+
     Driver(const MyString &, const MyString &, double, System *,
            const Address &, const MyString &, const MyString &, double);
 
