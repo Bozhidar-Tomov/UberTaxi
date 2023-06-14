@@ -199,16 +199,7 @@ void System::saveData()
 
     file.close();
 
-    file.open(STATISTICS_DATA_FILE_DIR, std::ios::binary);
-    if (!file.is_open())
-        throw file_stream_error("Cannot open file!", ORDERS_DATA_FILE_DIR);
-
-    file.write(reinterpret_cast<const char *>(&profit), sizeof(profit));
-    file.write(reinterpret_cast<const char *>(&driversCount), sizeof(driversCount));
-    file.write(reinterpret_cast<const char *>(&clientsCount), sizeof(clientsCount));
-    file.write(reinterpret_cast<const char *>(&ordersCount), sizeof(ordersCount));
-
-    file.close();
+    saveStatistics();
 }
 
 void System::addOrder(SharedPtr<Order> order)
@@ -313,6 +304,12 @@ void System::markOrderInProgress(size_t orderID)
     pendingOrders.pop_at(idx);
 }
 
+void System::resetStatistics()
+{
+    profit = 0;
+    driversCount = clientsCount = ordersCount = 0;
+}
+
 SharedPtr<Client> System::loginClient(const char *name, const char *password)
 {
     for (size_t i = 0; i < clients.size(); ++i)
@@ -351,7 +348,7 @@ SharedPtr<Client> System::registerClient(const char *name, const char *password,
     if (!validateName(name) || !validatePassword(password))
         return SharedPtr<Client>();
 
-    clients.push_back(SharedPtr<Client>(new Client(MyString(name), MyString(password), moneyAvailable)));
+    clients.push_back(SharedPtr<Client>(new Client(MyString(name), MyString(password), moneyAvailable, this)));
     ++clientsCount;
 
     return clients[clients.size() - 1];
@@ -368,10 +365,24 @@ SharedPtr<Driver> System::registerDriver(const char *name, const char *password,
         throw std::invalid_argument("Invalid name or password");
 
     drivers.push_back(SharedPtr<Driver>(
-        new Driver(MyString(name), MyString(password), moneyAvailable,
+        new Driver(MyString(name), MyString(password), moneyAvailable, this,
                    Address(), MyString(phoneNumber), MyString(plateNumber), chargePerKm)));
-    // BUG add system pointer to the newly created user
     ++driversCount;
 
     return drivers[drivers.size() - 1];
+}
+
+void System::saveStatistics() const
+{
+    std::ofstream file(STATISTICS_DATA_FILE_DIR, std::ios::binary);
+
+    if (!file.is_open())
+        throw file_stream_error("Cannot open file!", STATISTICS_DATA_FILE_DIR);
+
+    file.write(reinterpret_cast<const char *>(&profit), sizeof(profit));
+    file.write(reinterpret_cast<const char *>(&driversCount), sizeof(driversCount));
+    file.write(reinterpret_cast<const char *>(&clientsCount), sizeof(clientsCount));
+    file.write(reinterpret_cast<const char *>(&ordersCount), sizeof(ordersCount));
+
+    file.close();
 }

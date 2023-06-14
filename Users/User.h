@@ -25,14 +25,14 @@ protected:
     MyString _name;
     MyString _password;
     SharedPtr<Order> _currentOrder;
-    System *_sys;
+    System *_sys = nullptr;
     Messages _messages;
     double _moneyAvailable = 0;
 
 public:
     User() = default;
-    User(const MyString &, const MyString &, double);
-    User(MyString &&, MyString &&, double);
+    User(const MyString &, const MyString &, double, System *);
+    User(MyString &&, MyString &&, double, System *);
 
     void setName(const MyString &);
     void setName(MyString &&);

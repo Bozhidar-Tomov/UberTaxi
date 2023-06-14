@@ -9,7 +9,7 @@ class Client : public User
 public:
     Client() = default;
     // Client(const MyString &, const MyString &, double);
-    Client(MyString &&, MyString &&, double);
+    Client(MyString &&, MyString &&, double, System *sys);
 
     void order(Address &&, Address &&, uint8_t);
     void checkOrder() const;

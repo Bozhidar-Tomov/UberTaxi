@@ -9,16 +9,16 @@
 int main()
 {
     System sys;
-
     sys.loadData();
 
-    SharedPtr<Client> client = sys.loginClient("new name", "P@ssword1");
-    SharedPtr<Driver> driver = sys.registerDriver("New name", "P@ssword1", "phone num", "plate num", 25, 1.2);
+    SharedPtr<Client> client = sys.registerClient("New Client", "P@ssword1", 100);
+    // SharedPtr<Client> client = sys.loginClient("new name", "P@ssword1");
+    SharedPtr<Driver> driver = sys.registerDriver("New name", "P@ssword1", "phone num", "plate num", 100, 1.2);
     // SharedPtr<Driver> driver = sys.loginDriver("new name", "P@ssword1");
 
     client->order(Address(MyString("addrs"), 5, 5, MyString("descr")), Address(MyString("addrs"), 50, 50, MyString("descr")), 9);
 
-    // driver->checkAvailableOrders();
+    driver->checkAvailableOrders();
     driver->acceptOrder(1, 25);
     driver->finishOrder();
 

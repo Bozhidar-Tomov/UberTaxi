@@ -23,10 +23,10 @@ class Driver : public User
 
 public:
     Driver() = default;
-    Driver(const MyString &, const MyString &, double,
+    Driver(const MyString &, const MyString &, double, System *,
            const Address &, const MyString &, const MyString &, double);
 
-    Driver(MyString &&, MyString &&, double,
+    Driver(MyString &&, MyString &&, double, System *,
            Address &&, MyString &&, MyString &&, double) noexcept;
 
     void setPhoneNumber(const char *);

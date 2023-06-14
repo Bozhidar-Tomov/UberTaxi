@@ -2,8 +2,8 @@
 #include "../System.h"
 #include "../constants.h"
 
-Client::Client(MyString &&name, MyString &&password, double moneyAvailable)
-    : User(std::move(name), std::move(password), moneyAvailable) {}
+Client::Client(MyString &&name, MyString &&password, double moneyAvailable, System *sys)
+    : User(std::move(name), std::move(password), moneyAvailable, sys) {}
 
 void Client::order(Address &&pickupAddress, Address &&destAddress, uint8_t passengerCount)
 {

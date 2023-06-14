@@ -5,15 +5,15 @@
 #include <iostream>
 #include "../Utils.h"
 
-Driver::Driver(const MyString &name, const MyString &password, double moneyAvailable,
+Driver::Driver(const MyString &name, const MyString &password, double moneyAvailable, System *sys,
                const Address &address, const MyString &phoneNumber, const MyString &plateNumber, double chargePerKm)
-    : User(name, password, moneyAvailable),
+    : User(name, password, moneyAvailable, sys),
       _currAddress(address), _phoneNumber(phoneNumber), _plateNumber(plateNumber),
       _chargePerKm(chargePerKm) {}
 
-Driver::Driver(MyString &&name, MyString &&password, double moneyAvailable,
+Driver::Driver(MyString &&name, MyString &&password, double moneyAvailable, System *sys,
                Address &&address, MyString &&phoneNumber, MyString &&plateNumber, double chargePerKm) noexcept
-    : User(std::move(name), std::move(password), moneyAvailable),
+    : User(std::move(name), std::move(password), moneyAvailable, sys),
       _currAddress(std::move(address)), _phoneNumber(std::move(phoneNumber)), _plateNumber(std::move(plateNumber)),
       _chargePerKm(chargePerKm) {}
 
