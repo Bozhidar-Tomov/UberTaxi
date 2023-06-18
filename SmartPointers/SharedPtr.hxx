@@ -52,6 +52,13 @@ public:
     SharedPtr(SharedPtr<T> &&) noexcept;
     SharedPtr &operator=(SharedPtr<T> &&) noexcept;
 
+    template <typename U>
+    SharedPtr<T> &operator=(const SharedPtr<U> &other) noexcept
+    {
+        reset(other.get());
+        return *this;
+    }
+
     ~SharedPtr() noexcept;
 
     T &operator*();
@@ -75,6 +82,9 @@ private:
 
 template <typename T>
 bool operator==(const SharedPtr<T> &, const SharedPtr<T> &);
+
+template <typename U, typename T>
+SharedPtr<U> static_pointer_cast(const SharedPtr<T> &sp);
 
 //====================================================================
 
@@ -245,4 +255,11 @@ template <typename T>
 inline bool operator==(const SharedPtr<T> &lhs, const SharedPtr<T> &rhs)
 {
     return lhs.get() == rhs.get();
+}
+
+template <typename U, typename T>
+inline SharedPtr<U> static_pointer_cast(const SharedPtr<T> &sp)
+{
+    U *castedPtr = static_cast<U *>(sp.get());
+    return SharedPtr<U>(castedPtr);
 }

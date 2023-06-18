@@ -16,5 +16,39 @@ const char DELIM = '|';
 
 // Adding +1 and +1 for the two delimiters and +1 for '\0' at the end
 const unsigned BUFF_SIZE = MAX_PASSWORD_LEN + 1 + MAX_NAME_LEN + 1 + MAX_NUM_LEN + 1;
+const unsigned INPUT_BUFF_SIZE = 512;
 
 const unsigned short MESSAGE_COUNT = 5;
+
+enum class UserType
+{
+    Client,
+    Driver,
+    Quit,
+
+    none,
+};
+
+enum class CommandType
+{
+    Login,
+    Register,
+    Logout,
+    Quit,
+
+    Order,
+    CheckOrder,
+    CancelOrder,
+    Pay,
+    Rate,
+    AddMoney,
+
+    ChangeAddress,
+    GetMessages,
+    GetAvailableOrders,
+    AcceptOrder,
+    DeclineOrder,
+    FinishOrder,
+
+    none,
+};

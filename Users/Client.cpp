@@ -16,8 +16,10 @@ void Client::order(Address &&pickupAddress, Address &&destAddress, uint8_t passe
     SharedPtr<Order> newOrder(new Order(std::move(pickupAddress), std::move(destAddress), this, passengerCount));
     this->addOrder(newOrder);
     _sys->addOrder(newOrder);
+    std::cout << "Successful order." << '\n';
 }
 
+// FIXME handle case when order is marked as finished
 void Client::checkOrder() const
 {
     std::cout << LINE_SEPARATOR << std::endl;
@@ -47,13 +49,17 @@ void Client::cancelOrder()
         throw std::runtime_error("There is no active order.");
 
     _sys->removeOrder_clientCall(_currentOrder);
+    _currentOrder.reset();
 }
 
 void Client::pay()
 {
     // TODO add money to driver and update statistics
+    if (!_currentOrder)
+        throw std::runtime_error("No current order.");
+
     if (_currentOrder->isInProgress())
-        throw std::runtime_error("Order is still in progress. Wait for driver to mark it as finished");
+        throw std::runtime_error("Order is still in progress. Wait for driver to mark it as finished.");
 
     if (_currentOrder->isPending())
         throw std::runtime_error("Order is pending. Paying in advance is not allowed.");
@@ -98,4 +104,27 @@ std::ostream &operator<<(std::ostream &out, const Client &obj)
 std::istream &operator>>(std::istream &in, Client &obj)
 {
     return in >> static_cast<User &>(obj);
+}
+
+CommandType getClientCommandType(const MyString &command)
+{
+    if (command == "order")
+        return CommandType::Order;
+
+    if (command == "check-order")
+        return CommandType::CheckOrder;
+
+    if (command == "cancel-order")
+        return CommandType::CancelOrder;
+
+    if (command == "pay")
+        return CommandType::Pay;
+
+    if (command == "rate")
+        return CommandType::Rate;
+
+    if (command == "add-money")
+        return CommandType::AddMoney;
+
+    return CommandType::none;
 }

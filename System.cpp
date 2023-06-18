@@ -133,7 +133,7 @@ void System::loadData()
 
         ss >> *c;
         c->loadSystemPtr(this);
-        clients.push_back(c);
+        clients.push_back(std::move(c));
     }
 
     file.close();
@@ -153,7 +153,7 @@ void System::loadData()
 
         ss >> *d;
         d->loadSystemPtr(this);
-        drivers.push_back(d);
+        drivers.push_back(std::move(d));
     }
 
     file.close();
@@ -310,7 +310,7 @@ void System::resetStatistics()
     driversCount = clientsCount = ordersCount = 0;
 }
 
-SharedPtr<Client> System::loginClient(const char *name, const char *password)
+SharedPtr<Client> System::loginClient(const MyString &name, const MyString &password)
 {
     for (size_t i = 0; i < clients.size(); ++i)
     {
@@ -324,7 +324,7 @@ SharedPtr<Client> System::loginClient(const char *name, const char *password)
     }
     throw std::invalid_argument("Client with this name not found.");
 }
-SharedPtr<Driver> System::loginDriver(const char *name, const char *password)
+SharedPtr<Driver> System::loginDriver(const MyString &name, const MyString &password)
 {
     for (size_t i = 0; i < drivers.size(); ++i)
     {
@@ -339,34 +339,34 @@ SharedPtr<Driver> System::loginDriver(const char *name, const char *password)
     throw std::invalid_argument("Driver with this name not found.");
 }
 
-SharedPtr<Client> System::registerClient(const char *name, const char *password, double moneyAvailable)
+SharedPtr<Client> System::registerClient(MyString &&name, MyString &&password, double moneyAvailable)
 {
     for (size_t i = 0; i < clients.size(); ++i)
         if (clients[i]->getName() == name)
             return SharedPtr<Client>();
 
-    if (!validateName(name) || !validatePassword(password))
+    if (!validateName(*name) || !validatePassword(*password))
         return SharedPtr<Client>();
 
-    clients.push_back(SharedPtr<Client>(new Client(MyString(name), MyString(password), moneyAvailable, this)));
+    clients.push_back(SharedPtr<Client>(new Client(std::move(name), std::move(password), moneyAvailable, this)));
     ++clientsCount;
 
     return clients[clients.size() - 1];
 }
 
-SharedPtr<Driver> System::registerDriver(const char *name, const char *password, const char *phoneNumber,
-                                         const char *plateNumber, double moneyAvailable, double chargePerKm)
+SharedPtr<Driver> System::registerDriver(MyString &&name, MyString &&password, MyString &&phoneNumber,
+                                         MyString &&plateNumber, double moneyAvailable, double chargePerKm)
 {
     for (size_t i = 0; i < drivers.size(); ++i)
         if (drivers[i]->getName() == name)
             throw std::logic_error("Driver with this name already exists.");
 
-    if (!validateName(name) || !validatePassword(password))
+    if (!validateName(*name) || !validatePassword(*password))
         throw std::invalid_argument("Invalid name or password");
 
     drivers.push_back(SharedPtr<Driver>(
-        new Driver(MyString(name), MyString(password), moneyAvailable, this,
-                   Address(), MyString(phoneNumber), MyString(plateNumber), chargePerKm)));
+        new Driver(std::move(name), std::move(password), moneyAvailable, this,
+                   Address(), std::move(phoneNumber), std::move(plateNumber), chargePerKm)));
     ++driversCount;
 
     return drivers[drivers.size() - 1];

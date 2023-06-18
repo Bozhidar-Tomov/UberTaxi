@@ -49,6 +49,16 @@ const Address &Driver::getAddress() const
 
 void Driver::checkAvailableOrders() const
 {
+    if (_currentOrder)
+        throw std::logic_error(
+            *MyString("You have an active order (ID ")
+                 .append(intToChar(_currentOrder->getID()))
+                 .append(")")
+                 .append("\n"));
+
+    if (_upcomingOrders.empty())
+        throw std::logic_error("No orders available right now.");
+
     for (size_t i = 0; i < _upcomingOrders.size(); ++i)
         std::cout << *_upcomingOrders[i] << std::endl
                   << LINE_SEPARATOR << std::endl;
@@ -170,6 +180,29 @@ std::istream &operator>>(std::istream &in, Driver::Rating &obj)
     obj._count = strToSize_t(buff);
 
     return in;
+}
+
+CommandType getDriverCommandType(const MyString &command)
+{
+    if (command == "change-address")
+        return CommandType::ChangeAddress;
+
+    if (command == "get-messages")
+        return CommandType::GetMessages;
+
+    if (command == "get-orders")
+        return CommandType::GetAvailableOrders;
+
+    if (command == "accept-order")
+        return CommandType::AcceptOrder;
+
+    if (command == "decline-order")
+        return CommandType::DeclineOrder;
+
+    if (command == "finish-order")
+        return CommandType::FinishOrder;
+
+    return CommandType::none;
 }
 
 void Driver::Rating::addRating(double rating)

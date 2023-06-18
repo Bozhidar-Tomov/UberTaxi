@@ -52,3 +52,4 @@ public:
     friend std::istream &operator>>(std::istream &, Driver &);
     friend std::istream &operator>>(std::istream &, Driver::Rating &);
 };
+CommandType getDriverCommandType(const MyString &command);

@@ -76,8 +76,10 @@ void User::addMessage(MyString &&message) noexcept
     _messages.addMessage(std::move(message));
 }
 
-void User::getMessages() const noexcept
+void User::getMessages() const
 {
+    if (_messages.empty())
+        throw std::logic_error("No messages available.");
     _messages.printMessages();
 }
 
@@ -106,6 +108,11 @@ std::istream &operator>>(std::istream &in, User &obj)
     obj.setMoneyAvailable(strToDouble(buff));
 
     return in;
+}
+
+bool User::Messages::empty() const noexcept
+{
+    return !count;
 }
 
 void User::Messages::addMessage(MyString &&message) noexcept

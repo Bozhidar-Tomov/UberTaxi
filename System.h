@@ -6,12 +6,6 @@
 #include "Users/Driver.h"
 #include "Order/Order.h"
 
-enum UserType
-{
-    client,
-    driver,
-};
-
 // TODO: Make it singleton
 class System
 {
@@ -34,6 +28,7 @@ public:
     void loadData();
     void saveData();
 
+    //===================== private
     void addOrder(SharedPtr<Order>);
     void notifyClosestDriver(SharedPtr<Order>, Driver *excludedDriver = nullptr);
     void removeOrder_clientCall(SharedPtr<Order>); // experimental
@@ -47,11 +42,13 @@ public:
 
     void resetStatistics();
 
-    SharedPtr<Client> loginClient(const char *name, const char *password);
-    SharedPtr<Driver> loginDriver(const char *name, const char *password);
+    //===================== private
 
-    SharedPtr<Client> registerClient(const char *name, const char *password, double moneyAvailable = 0);
-    SharedPtr<Driver> registerDriver(const char *name, const char *password, const char *phoneNumber, const char *plateNumber, double moneyAvailable = 0, double chargePerKm = 1);
+    SharedPtr<Client> loginClient(const MyString &name, const MyString &password);
+    SharedPtr<Driver> loginDriver(const MyString &name, const MyString &password);
+
+    SharedPtr<Client> registerClient(MyString &&name, MyString &&password, double moneyAvailable = 0);
+    SharedPtr<Driver> registerDriver(MyString &&name, MyString &&password, MyString &&phoneNumber, MyString &&plateNumber, double moneyAvailable = 0, double chargePerKm = 1);
 
     // TODO should be private
     void saveStatistics() const;

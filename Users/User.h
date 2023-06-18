@@ -17,6 +17,7 @@ class User
         unsigned int endPtr = 0;
 
     public:
+        bool empty() const noexcept;
         void addMessage(MyString &&) noexcept;
         void printMessages() const noexcept;
     };
@@ -55,7 +56,7 @@ public:
     bool hasOrder() const noexcept;
 
     void addMessage(MyString &&) noexcept;
-    void getMessages() const noexcept;
+    void getMessages() const;
     // void logout();
     // void deleteAccount(const MyVector<MyString> &, const MyVector<MyString> &, int *);
 
