@@ -8,7 +8,8 @@ int main()
         Interface program;
         program.run();
     }
-    catch (const std::exception &e)
+    catch (std::exception &e)
     {
+        std::cout << e.what();
     }
 }

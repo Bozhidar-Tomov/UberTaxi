@@ -19,7 +19,6 @@ class Interface
     void order();
 
     void handleUserInput();
-    // void handleExceptions(void (Interface::*func)(const char *), const char *) noexcept;
 
 public:
     Interface();

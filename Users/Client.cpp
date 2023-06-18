@@ -14,6 +14,7 @@ void Client::order(Address &&pickupAddress, Address &&destAddress, uint8_t passe
         throw std::runtime_error("There is an active order. Cannot create another one.");
 
     SharedPtr<Order> newOrder(new Order(std::move(pickupAddress), std::move(destAddress), this, passengerCount));
+    newOrder->changeStatus(OrderStatus::Pending);
     this->addOrder(newOrder);
     _sys->addOrder(newOrder);
     std::cout << "Successful order." << '\n';
@@ -37,8 +38,12 @@ void Client::checkOrder() const
         std::cout << *_currentOrder->getDriver() << std::endl;
         std::cout << "Arrives in: " << _currentOrder->getArriveIn() << " mins." << std::endl;
     }
-    else if (!_currentOrder->getDriver())
+    else if (_currentOrder->isPending())
         std::cout << "Order (ID " << _currentOrder->getID() << ") is pending." << std::endl;
+    else if (_currentOrder->isFinished())
+        std::cout << "Waiting for payment to be made." << std::endl;
+    else
+        std::cout << "Something went wrong." << std::endl;
 
     std::cout << LINE_SEPARATOR << std::endl;
 }

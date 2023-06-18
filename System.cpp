@@ -3,7 +3,6 @@
 #include <float.h> // including DBL_MAX
 #include "System.h"
 #include "constants.h"
-#include "Exceptions/file_stream_error.h"
 #include "Utils.h"
 
 namespace
@@ -118,7 +117,7 @@ void System::loadData()
     std::ifstream file(CLIENTS_DATA_FILE_DIR, std::ios::in);
 
     if (!file.is_open())
-        throw file_stream_error("Cannot open file!", CLIENTS_DATA_FILE_DIR);
+        throw std::runtime_error(*MyString("Cannot open file ").append(CLIENTS_DATA_FILE_DIR));
 
     std::stringstream ss;
     char line[BUFF_SIZE];
@@ -141,7 +140,7 @@ void System::loadData()
     file.open(DRIVERS_DATA_FILE_DIR, std::ios::in);
 
     if (!file.is_open())
-        throw file_stream_error("Cannot open file!", DRIVERS_DATA_FILE_DIR);
+        throw std::runtime_error(*MyString("Cannot open file ").append(DRIVERS_DATA_FILE_DIR));
 
     while (!file.eof() && file.getline(line, BUFF_SIZE))
     {
@@ -173,7 +172,7 @@ void System::saveData()
     std::ofstream file(CLIENTS_DATA_FILE_DIR, std::ios::out);
 
     if (!file.is_open())
-        throw file_stream_error("Cannot open file!", CLIENTS_DATA_FILE_DIR);
+        throw std::runtime_error(*MyString("Cannot open file ").append(CLIENTS_DATA_FILE_DIR));
 
     for (size_t i = 0; i < clients.size(); ++i)
         file << *clients[i] << '\n';
@@ -183,7 +182,7 @@ void System::saveData()
     file.open(DRIVERS_DATA_FILE_DIR, std::ios::out);
 
     if (!file.is_open())
-        throw file_stream_error("Cannot open file!", DRIVERS_DATA_FILE_DIR);
+        throw std::runtime_error(*MyString("Cannot open file ").append(DRIVERS_DATA_FILE_DIR));
 
     for (size_t i = 0; i < drivers.size(); ++i)
         file << *drivers[i] << '\n';
@@ -192,7 +191,7 @@ void System::saveData()
 
     file.open(ORDERS_DATA_FILE_DIR, std::ios::app);
     if (!file.is_open())
-        throw file_stream_error("Cannot open file!", ORDERS_DATA_FILE_DIR);
+        throw std::runtime_error(*MyString("Cannot open file ").append(ORDERS_DATA_FILE_DIR));
 
     for (size_t i = 0; i < finishedOrders.size(); ++i)
         file << *finishedOrders[i] << '\n';
@@ -377,7 +376,7 @@ void System::saveStatistics() const
     std::ofstream file(STATISTICS_DATA_FILE_DIR, std::ios::binary);
 
     if (!file.is_open())
-        throw file_stream_error("Cannot open file!", STATISTICS_DATA_FILE_DIR);
+        throw std::runtime_error(*MyString("Cannot open file ").append(STATISTICS_DATA_FILE_DIR));
 
     file.write(reinterpret_cast<const char *>(&profit), sizeof(profit));
     file.write(reinterpret_cast<const char *>(&driversCount), sizeof(driversCount));
