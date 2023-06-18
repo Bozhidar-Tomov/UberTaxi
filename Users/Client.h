@@ -1,6 +1,6 @@
 #pragma once
-#include "../MyString/MyString.h"
 #include "User.h"
+#include "../MyString/MyString.h"
 #include "../Address.h"
 
 class Client : public User

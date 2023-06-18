@@ -1,7 +1,6 @@
 #pragma once
 #include "MyVector/MyVector.h"
 #include "SmartPointers/SharedPtr.hxx"
-#include "SmartPointers/UniquePtr.hxx"
 #include "Users/Client.h"
 #include "Users/Driver.h"
 #include "Order/Order.h"

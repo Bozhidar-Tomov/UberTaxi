@@ -1,14 +1,11 @@
 #pragma once
-
 #include "System.h"
-#include "Commands/Command.h"
 
 class Interface
 {
     System sys;
     SharedPtr<Client> client;
     SharedPtr<Driver> driver;
-    MyVector<Command> commands;
     UserType userType = UserType::none;
 
     CommandType getCommandType(const MyString &command);

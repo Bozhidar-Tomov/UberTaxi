@@ -1,7 +1,6 @@
 #pragma once
 #include <iostream>
 #include "../MyString/MyString.h"
-#include "../MyVector/MyVector.h"
 #include "../Order/Order.h"
 #include "../SmartPointers/SharedPtr.hxx"
 #include "../constants.h"
@@ -55,8 +54,6 @@ public:
 
     void addMessage(MyString &&) noexcept;
     void getMessages() const;
-    // void logout();
-    // void deleteAccount(const MyVector<MyString> &, const MyVector<MyString> &, int *);
 
     friend std::ostream &operator<<(std::ostream &, const User &);
     friend std::istream &operator>>(std::istream &, User &);

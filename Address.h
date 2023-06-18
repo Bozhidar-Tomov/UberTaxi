@@ -1,7 +1,6 @@
 #pragma once
-#include <math.h>
-#include "MyString/MyString.h"
 #include <iostream>
+#include "MyString/MyString.h"
 
 class Address
 {
