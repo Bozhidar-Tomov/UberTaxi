@@ -2,7 +2,6 @@
 #include <limits>
 #include "Interface.h"
 #include "constants.h"
-#include "MyString/Utils.h"
 
 namespace
 {
@@ -48,14 +47,14 @@ namespace
     }
 }
 
-UserType getUserType(const char *user)
+UserType getUserType(const MyString &user)
 {
-    if (myStrCmp(user, "client") == 0)
+    if (user == "client")
         return UserType::Client;
 
-    if (myStrCmp(user, "driver") == 0)
+    if (user == "driver")
         return UserType::Driver;
-    if (myStrCmp(user, "quit") == 0)
+    if (user == "quit")
         return UserType::Quit;
 
     return UserType::none;
@@ -327,7 +326,7 @@ void Interface::run()
         static char buff[INPUT_BUFF_SIZE];
         std::cin.getline(buff, INPUT_BUFF_SIZE, '\n');
 
-        userType = getUserType(buff);
+        userType = getUserType(MyString(buff));
         std::stringstream line(buff);
 
         switch (userType)
