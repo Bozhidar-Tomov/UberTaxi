@@ -6,7 +6,7 @@
 #include "../SmartPointers/SharedPtr.hxx"
 #include "../constants.h"
 class System;
-// TODO: Fix alignment of all classes
+
 class User
 {
     struct Messages
@@ -25,9 +25,9 @@ class User
 protected:
     MyString _name;
     MyString _password;
+    Messages _messages;
     SharedPtr<Order> _currentOrder;
     System *_sys = nullptr;
-    Messages _messages;
     double _moneyAvailable = 0;
 
 public:
@@ -39,11 +39,9 @@ public:
     void setName(MyString &&);
     const MyString &getName() const noexcept;
 
-    // TODO should be private
     void setPassword(const MyString &);
     void setPassword(MyString &&);
     const MyString &getPassword() const noexcept;
-    //==============================
 
     void setMoneyAvailable(double) noexcept;
     double getMoneyAvailable() const noexcept;

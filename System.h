@@ -6,15 +6,11 @@
 #include "Users/Driver.h"
 #include "Order/Order.h"
 
-// TODO: Make it singleton
 class System
 {
-    // IDEA: make heterogeneous container
-    // IDEA: make vector of objects
     MyVector<SharedPtr<Client>> clients;
     MyVector<SharedPtr<Driver>> drivers;
 
-    // IDEA: leave it as pointers since a lot of change is happening
     MyVector<SharedPtr<Order>> pendingOrders;
     MyVector<SharedPtr<Order>> inProgressOrders;
     MyVector<SharedPtr<Order>> finishedOrders;

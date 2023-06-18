@@ -20,7 +20,6 @@ void Client::order(Address &&pickupAddress, Address &&destAddress, uint8_t passe
     std::cout << "Successful order." << '\n';
 }
 
-// FIXME handle case when order is marked as finished
 void Client::checkOrder() const
 {
     std::cout << LINE_SEPARATOR << std::endl;
@@ -76,6 +75,7 @@ void Client::pay()
 
         _currentOrder->changeStatus(OrderStatus::Finalized);
         _moneyAvailable -= _currentOrder->getCost();
+
         _currentOrder->accessDriver()->addMoney(_currentOrder->getCost());
         _sys->addProfit(_currentOrder->getCost());
         _sys->releaseOrder(_currentOrder);

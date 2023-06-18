@@ -19,6 +19,7 @@ class Interface
     void order();
 
     void handleUserInput();
+    void handleExceptions(void (Interface::*func)()) noexcept;
 
 public:
     Interface() : sys(System::getInstance()){};

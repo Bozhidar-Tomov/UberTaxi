@@ -18,7 +18,6 @@ enum class OrderStatus
 
 class Order
 {
-    // IDEA store idx as member variable
     Address _pickupAddress;
     Address _destAddress;
 
