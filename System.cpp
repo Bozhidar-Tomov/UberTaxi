@@ -269,6 +269,9 @@ void System::removeOrder_clientCall(SharedPtr<Order> order) // experimental
             if (pendingOrders[i]->getID() == order->getID())
             {
                 order->changeStatus(OrderStatus::Canceled);
+                for (size_t i = 0; i < drivers.size(); ++i)
+                    drivers[i]->removeOrderFromPool(order->getID());
+
                 pendingOrders.pop_at(i);
                 return;
             }
