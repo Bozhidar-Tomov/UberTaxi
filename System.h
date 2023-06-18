@@ -24,7 +24,11 @@ class System
     size_t clientsCount = 0;
     size_t ordersCount = 0;
 
+    System();
+
 public:
+    static System &getInstance();
+
     void loadData();
     void saveData();
 

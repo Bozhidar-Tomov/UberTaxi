@@ -112,6 +112,17 @@ namespace
     }
 }
 
+System &System::getInstance()
+{
+    static System instance;
+    return instance;
+}
+
+System::System()
+{
+    loadData();
+}
+
 void System::loadData()
 {
     std::ifstream file(CLIENTS_DATA_FILE_DIR, std::ios::in);

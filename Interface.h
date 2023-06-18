@@ -21,6 +21,6 @@ class Interface
     void handleUserInput();
 
 public:
-    Interface();
+    Interface() : sys(System::getInstance()){};
     void run();
 };
