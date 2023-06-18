@@ -28,7 +28,6 @@ public:
     void loadData();
     void saveData();
 
-    //===================== private
     void addOrder(SharedPtr<Order>);
     void notifyClosestDriver(SharedPtr<Order>, Driver *excludedDriver = nullptr);
     void removeOrder_clientCall(SharedPtr<Order>); // experimental
@@ -40,16 +39,13 @@ public:
 
     void markOrderInProgress(size_t id);
 
-    void resetStatistics();
-
-    //===================== private
-
     SharedPtr<Client> loginClient(const MyString &name, const MyString &password);
     SharedPtr<Driver> loginDriver(const MyString &name, const MyString &password);
 
     SharedPtr<Client> registerClient(MyString &&name, MyString &&password, double moneyAvailable = 0);
     SharedPtr<Driver> registerDriver(MyString &&name, MyString &&password, MyString &&phoneNumber, MyString &&plateNumber, double moneyAvailable = 0, double chargePerKm = 1);
 
-    // TODO should be private
+private:
     void saveStatistics() const;
+    void resetStatistics();
 };
