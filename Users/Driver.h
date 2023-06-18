@@ -46,6 +46,8 @@ public:
     void finishOrder();
     void addRating(double);
 
+    void removeOrderFromPool(size_t);
+
     friend std::ostream &operator<<(std::ostream &, const Driver &);
     friend std::ostream &operator<<(std::ostream &, const Driver::Rating &);
 

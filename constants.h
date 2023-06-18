@@ -20,6 +20,8 @@ const unsigned INPUT_BUFF_SIZE = 512;
 
 const unsigned short MESSAGE_COUNT = 5;
 
+const double EPSILON = 0.000001;
+
 enum class UserType
 {
     Client,

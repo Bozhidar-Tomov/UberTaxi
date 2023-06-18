@@ -71,7 +71,7 @@ void Driver::addOrder(SharedPtr<Order> order)
 
 void Driver::acceptOrder(size_t orderID, unsigned short minutes)
 {
-    if (_currentOrder.get())
+    if (_currentOrder)
         throw std::logic_error(
             *MyString("Cannot accept new order before finishing current order. Order in progress ID: ")
                  .append(intToChar(_currentOrder->getID()))
@@ -117,6 +117,9 @@ void Driver::declineOrder(size_t orderID)
 
 void Driver::finishOrder()
 {
+    if (!_currentOrder)
+        throw std::runtime_error("No order in progress");
+
     _currentOrder->setCost(_currentOrder->getPickupAddress().getDist(_currentOrder->getDestAddress()) * _chargePerKm);
     _currAddress = _currentOrder->getDestAddress();
     _sys->finishOrder(_currentOrder);
@@ -125,6 +128,13 @@ void Driver::finishOrder()
 void Driver::addRating(double rating)
 {
     _rating.addRating(rating);
+}
+
+void Driver::removeOrderFromPool(size_t ID)
+{
+    for (size_t i = 0; i < _upcomingOrders.size(); ++i)
+        if (_upcomingOrders[i]->getID() == ID)
+            _upcomingOrders.pop_at(i);
 }
 
 std::ostream &operator<<(std::ostream &out, const Driver &obj)
@@ -201,6 +211,8 @@ CommandType getDriverCommandType(const MyString &command)
 
     if (command == "finish-order")
         return CommandType::FinishOrder;
+    if (command == "logout")
+        return CommandType::Logout;
 
     return CommandType::none;
 }

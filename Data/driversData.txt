@@ -1,2 +1,2 @@
-p p|c|176.368|phone num|plate num|1.2|5.33333|3
+p p|c|176.368|phone num|plate num|1.2|4.25|4
 New Driver|P@ssword1|0|phonenum|platenum|25.3|0|0

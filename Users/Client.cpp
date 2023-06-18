@@ -17,7 +17,6 @@ void Client::order(Address &&pickupAddress, Address &&destAddress, uint8_t passe
     newOrder->changeStatus(OrderStatus::Pending);
     this->addOrder(newOrder);
     _sys->addOrder(newOrder);
-    std::cout << "Successful order." << '\n';
 }
 
 void Client::checkOrder() const
@@ -56,9 +55,10 @@ void Client::cancelOrder()
     _currentOrder.reset();
 }
 
-void Client::pay()
+double Client::pay()
 {
-    // TODO add money to driver and update statistics
+    double cost;
+
     if (!_currentOrder)
         throw std::runtime_error("No current order.");
 
@@ -70,16 +70,21 @@ void Client::pay()
 
     if (_currentOrder->isFinished())
     {
-        if (_moneyAvailable < _currentOrder->getCost())
+        cost = _currentOrder->getCost();
+
+        if (_moneyAvailable < cost)
             throw std::runtime_error("Not enough balance to make a payment!");
 
         _currentOrder->changeStatus(OrderStatus::Finalized);
-        _moneyAvailable -= _currentOrder->getCost();
+        _moneyAvailable -= cost;
 
-        _currentOrder->accessDriver()->addMoney(_currentOrder->getCost());
-        _sys->addProfit(_currentOrder->getCost());
+        _currentOrder->accessDriver()->addMoney(cost);
+        _sys->removeOrder_clientCall(_currentOrder);
+        _sys->addProfit(cost);
         _sys->releaseOrder(_currentOrder);
     }
+
+    return cost;
 }
 
 void Client::rateDriver(unsigned short rating)
@@ -130,6 +135,9 @@ CommandType getClientCommandType(const MyString &command)
 
     if (command == "add-money")
         return CommandType::AddMoney;
+
+    if (command == "logout")
+        return CommandType::Logout;
 
     return CommandType::none;
 }

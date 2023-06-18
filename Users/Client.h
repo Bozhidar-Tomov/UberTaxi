@@ -14,7 +14,7 @@ public:
     void order(Address &&, Address &&, uint8_t);
     void checkOrder() const;
     void cancelOrder();
-    void pay();
+    double pay();
     void rateDriver(unsigned short);
     void addMoney(double) noexcept;
 

@@ -110,8 +110,4 @@ std::ostream &operator<<(std::ostream &out, const Order &obj)
              << obj._destAddress << DELIM
              << int16_t(obj._passengerCount) << DELIM
              << obj._cost;
-  // FIXME
-  // cannot << obj.driver because it is forward-declared.
-  // << obj._driver << DELIM
-  // << *(obj._client);
 }
