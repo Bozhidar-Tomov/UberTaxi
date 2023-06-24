@@ -4,6 +4,7 @@
 #include "Users/Client.h"
 #include "Users/Driver.h"
 #include "Order/Order.h"
+#include "Order/IdGenerator.h"
 
 class System
 {

@@ -120,6 +120,7 @@ System &System::getInstance()
 
 System::System()
 {
+    IdGenerator::seed(ordersCount + 1);
     loadData();
 }
 
