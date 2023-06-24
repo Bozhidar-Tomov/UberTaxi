@@ -7,7 +7,7 @@ namespace
 {
     MyString readString(std::stringstream &line)
     {
-        static char buff[INPUT_BUFF_SIZE];
+        char buff[INPUT_BUFF_SIZE];
         line >> buff;
         return MyString(buff);
     }
@@ -34,37 +34,32 @@ namespace
     {
         if (command == "register")
             return CommandType::Register;
-
         if (command == "login")
             return CommandType::Login;
-
         if (command == "logout")
             return CommandType::Logout;
-
         if (command == "quit")
             return CommandType::Quit;
         return CommandType::none;
     }
-}
 
-UserType getUserType(const MyString &user)
-{
-    if (user == "client")
-        return UserType::Client;
+    UserType getUserType(const MyString &user)
+    {
+        if (user == "client")
+            return UserType::Client;
+        if (user == "driver")
+            return UserType::Driver;
+        if (user == "quit")
+            return UserType::Quit;
 
-    if (user == "driver")
-        return UserType::Driver;
-    if (user == "quit")
-        return UserType::Quit;
-
-    return UserType::none;
+        return UserType::none;
+    }
 }
 
 CommandType Interface::getCommandType(const MyString &command)
 {
     if (client)
         return getClientCommandType(command);
-
     else if (driver)
         return getDriverCommandType(command);
     else
@@ -101,25 +96,6 @@ Address Interface::getAddress()
     }
 
     return Address(std::move(name), x, y, std::move(descr));
-}
-
-void Interface::parseLogin(std::stringstream &line)
-{
-    MyString name = readName(line);
-    MyString password = readString(line);
-
-    switch (userType)
-    {
-    case UserType::Client:
-        client = sys.loginClient(name, password);
-        break;
-    case UserType::Driver:
-        driver = sys.loginDriver(name, password);
-        break;
-    default:
-        std::cout << "system error login <first name> <second name> <password>" << std::endl;
-        return;
-    }
 }
 
 void Interface::order()
@@ -192,7 +168,6 @@ void Interface::handleUserInput()
                 {
                     static unsigned short rating;
                     line >> rating;
-                    static bool called = false;
 
                     if (rating == 0 || rating > 5)
                     {
@@ -200,14 +175,7 @@ void Interface::handleUserInput()
                         break;
                     }
 
-                    if (called)
-                    {
-                        std::cout << "Driver already rated with " << rating << " stars.\n";
-                        break;
-                    }
-
                     client->rateDriver(rating);
-                    called = true;
 
                     std::cout << "Successful rating.";
                     break;
@@ -219,6 +187,7 @@ void Interface::handleUserInput()
 
                     if (line.fail() || amount < EPSILON)
                     {
+                        line.clear();
                         std::cout << "Invalid amount.\n";
                         break;
                     }
@@ -248,7 +217,7 @@ void Interface::handleUserInput()
                     driver->getMessages();
                     break;
                 case CommandType::GetAvailableOrders:
-                    driver->checkAvailableOrders();
+                    driver->getAvailableOrders();
                     break;
                 case CommandType::AcceptOrder:
                 {
@@ -259,12 +228,13 @@ void Interface::handleUserInput()
 
                     if (line.fail())
                     {
-                        std::cout << "Invalid input\n";
+                        line.clear();
+                        std::cout << "Invalid input.\n";
                         break;
                     }
 
                     driver->acceptOrder(ID, minutes);
-                    std::cout << "Order accepted\n";
+                    std::cout << "Order accepted.\n";
                     break;
                 }
                 case CommandType::DeclineOrder:
@@ -274,12 +244,13 @@ void Interface::handleUserInput()
 
                     if (line.fail())
                     {
-                        std::cout << "Invalid input\n";
+                        line.clear();
+                        std::cout << "Invalid input.\n";
                         break;
                     }
 
                     driver->declineOrder(ID);
-                    std::cout << "Order declined\n";
+                    std::cout << "Order declined.\n";
                     break;
                 }
                 case CommandType::FinishOrder:
@@ -332,11 +303,8 @@ void Interface::run()
         switch (userType)
         {
         case UserType::Client:
-        {
             std::cout << "==================  Client mode  ==================" << std::endl;
             break;
-        }
-
         case UserType::Driver:
             std::cout << "==================  Driver mode  ==================" << std::endl;
             break;
@@ -349,9 +317,9 @@ void Interface::run()
             std::cout << "Invalid user type: " << buff << std::endl;
             continue;
         }
-
         handleUserInput();
     }
+    std::cout << "\nExiting program\n";
 }
 
 void Interface::parseRegister(std::stringstream &line)
@@ -380,5 +348,24 @@ void Interface::parseRegister(std::stringstream &line)
         std::cout << "Invalid input" << '\n';
         break;
     }
+    }
+}
+
+void Interface::parseLogin(std::stringstream &line)
+{
+    MyString name = readName(line);
+    MyString password = readString(line);
+
+    switch (userType)
+    {
+    case UserType::Client:
+        client = sys.loginClient(name, password);
+        break;
+    case UserType::Driver:
+        driver = sys.loginDriver(name, password);
+        break;
+    default:
+        std::cout << "Invalid user type." << std::endl;
+        return;
     }
 }

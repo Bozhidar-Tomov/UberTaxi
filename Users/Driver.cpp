@@ -46,7 +46,7 @@ const Address &Driver::getAddress() const
     return _currAddress;
 }
 
-void Driver::checkAvailableOrders() const
+void Driver::getAvailableOrders() const
 {
     if (_currentOrder)
         throw std::logic_error(

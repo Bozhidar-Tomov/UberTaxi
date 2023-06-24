@@ -51,6 +51,7 @@ void Client::cancelOrder()
     if (!_currentOrder.get())
         throw std::runtime_error("There is no active order.");
 
+    _isOrderDriverRated = false;
     _sys->removeOrder_clientCall(_currentOrder);
     _currentOrder.reset();
 }
@@ -89,11 +90,15 @@ double Client::pay()
 
 void Client::rateDriver(unsigned short rating)
 {
+    if (_isOrderDriverRated)
+        throw std::runtime_error("Driver already rated");
+
     if (!_currentOrder)
         throw std::runtime_error("No current order.");
 
     if (_currentOrder->isFinished())
     {
+        _isOrderDriverRated = true;
         _currentOrder->accessDriver()->addRating(rating);
         return;
     }
@@ -140,4 +145,6 @@ CommandType getClientCommandType(const MyString &command)
         return CommandType::Logout;
 
     return CommandType::none;
+
+    // TODO add login and register to class user
 }

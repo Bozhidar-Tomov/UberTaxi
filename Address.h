@@ -21,8 +21,13 @@ class Address
 
 public:
     Address() = default;
+    Address(const Address &) = default;
+    Address(Address &&) noexcept = default;
+    Address &operator=(const Address &) = default;
+    Address &operator=(Address &&) noexcept = default;
+
     Address(const MyString &, double, double, const MyString & = MyString(""));
-    Address(MyString &&, double, double, const MyString && = MyString("")) noexcept;
+    Address(MyString &&, double, double, MyString && = MyString("")) noexcept;
     ~Address() = default;
 
     double getDist(const Address &) const noexcept;

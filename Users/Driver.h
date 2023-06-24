@@ -39,7 +39,7 @@ public:
 
     const Address &getAddress() const;
 
-    void checkAvailableOrders() const;
+    void getAvailableOrders() const;
     void addOrder(SharedPtr<Order>);
     void acceptOrder(size_t, unsigned short);
     void declineOrder(size_t);

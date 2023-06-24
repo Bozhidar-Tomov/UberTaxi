@@ -5,6 +5,7 @@
 
 class Client : public User
 {
+    bool _isOrderDriverRated = false;
 
 public:
     Client() = default;

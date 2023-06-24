@@ -9,8 +9,8 @@ MyString::MyString(const char *data)
 {
     if (!data)
     {
-
         _data = new char[_capacity];
+        _data[0] = '\0';
         return;
     }
 

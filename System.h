@@ -29,7 +29,7 @@ public:
 
     void addOrder(SharedPtr<Order>);
     void notifyClosestDriver(SharedPtr<Order>, Driver *excludedDriver = nullptr);
-    void removeOrder_clientCall(SharedPtr<Order>); // experimental
+    void removeOrder_clientCall(SharedPtr<Order>);
 
     void finishOrder(SharedPtr<Order>);
     void releaseOrder(SharedPtr<Order>);
