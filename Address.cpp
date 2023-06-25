@@ -16,7 +16,7 @@ double Address::getDist(const Address &other) const noexcept
 std::ostream &operator<<(std::ostream &out, const Address &obj)
 {
     if (&out == &std::cout)
-        return out << "name: " << obj._name << ", description: " << obj._description;
+        return out << "name: " << obj._name << (obj._description.empty() ? "" : *MyString(", description: ").append(obj._description));
 
     return out << obj._name << DELIM
                << obj._description << DELIM

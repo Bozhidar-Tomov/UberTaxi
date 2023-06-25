@@ -32,12 +32,10 @@ namespace
 
     CommandType getCommonCommandType(const MyString &command)
     {
-        if (command == "register")
-            return CommandType::Register;
-        if (command == "login")
-            return CommandType::Login;
-        if (command == "logout")
-            return CommandType::Logout;
+        Optional<CommandType> userCommand = getUserCommandType(command);
+
+        if (userCommand)
+            return userCommand.getData();
         if (command == "quit")
             return CommandType::Quit;
         return CommandType::none;
@@ -58,10 +56,14 @@ namespace
 
 CommandType Interface::getCommandType(const MyString &command)
 {
-    if (client)
-        return getClientCommandType(command);
-    else if (driver)
-        return getDriverCommandType(command);
+    Optional<CommandType> commonCommand = getClientCommandType(command);
+    if (client && commonCommand)
+        return commonCommand.getData();
+
+    commonCommand = getDriverCommandType(command);
+    if (driver && commonCommand)
+        return commonCommand.getData();
+
     else
         return getCommonCommandType(command);
 }
@@ -166,7 +168,7 @@ void Interface::handleUserInput()
                 }
                 case CommandType::Rate:
                 {
-                    static unsigned short rating;
+                    unsigned short rating;
                     line >> rating;
 
                     if (rating == 0 || rating > 5)

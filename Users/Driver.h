@@ -11,6 +11,7 @@ class Driver : public User
         size_t _count = 0;
 
         void addRating(double);
+        explicit operator bool() const noexcept;
     };
 
     Address _currAddress;
@@ -54,4 +55,4 @@ public:
     friend std::istream &operator>>(std::istream &, Driver &);
     friend std::istream &operator>>(std::istream &, Driver::Rating &);
 };
-CommandType getDriverCommandType(const MyString &command);
+Optional<CommandType> getDriverCommandType(const MyString &command);

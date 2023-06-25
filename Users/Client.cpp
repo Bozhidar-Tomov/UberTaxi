@@ -80,8 +80,7 @@ double Client::pay()
         _moneyAvailable -= cost;
 
         _currentOrder->accessDriver()->addMoney(cost);
-        _sys->removeOrder_clientCall(_currentOrder);
-        _sys->addProfit(cost);
+        _sys->addProfit(cost); // TODO getting 50% for driver
         _sys->releaseOrder(_currentOrder);
     }
 
@@ -121,7 +120,7 @@ std::istream &operator>>(std::istream &in, Client &obj)
     return in >> static_cast<User &>(obj);
 }
 
-CommandType getClientCommandType(const MyString &command)
+Optional<CommandType> getClientCommandType(const MyString &command)
 {
     if (command == "order")
         return CommandType::Order;
@@ -144,7 +143,5 @@ CommandType getClientCommandType(const MyString &command)
     if (command == "logout")
         return CommandType::Logout;
 
-    return CommandType::none;
-
-    // TODO add login and register to class user
+    return getUserCommandType(command);
 }

@@ -4,6 +4,8 @@
 #include "../Order/Order.h"
 #include "../SmartPointers/SharedPtr.hxx"
 #include "../constants.h"
+#include "../Optional/Optional.h"
+
 class System;
 
 class User
@@ -58,3 +60,5 @@ public:
     friend std::ostream &operator<<(std::ostream &, const User &);
     friend std::istream &operator>>(std::istream &, User &);
 };
+
+Optional<CommandType> getUserCommandType(const MyString &command);

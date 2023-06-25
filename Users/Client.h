@@ -22,4 +22,4 @@ public:
     friend std::ostream &operator<<(std::ostream &, const Client &);
     friend std::istream &operator>>(std::istream &, Client &);
 };
-CommandType getClientCommandType(const MyString &command);
+Optional<CommandType> getClientCommandType(const MyString &command);

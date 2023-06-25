@@ -242,12 +242,12 @@ void System::notifyClosestDriver(SharedPtr<Order> order, Driver *excludedDriver)
     }
 
     if (idxClosestDriver == SIZE_MAX)
-        throw std::runtime_error("No drivers available.");
+        throw std::runtime_error("No drivers available to notify.");
 
     drivers.at(idxClosestDriver)->addOrder(order);
 }
 
-void System::removeOrder_clientCall(SharedPtr<Order> order) // experimental
+void System::removeOrder_clientCall(SharedPtr<Order> order)
 {
     if (order->isInProgress())
         for (size_t i = 0; i < inProgressOrders.size(); ++i)
@@ -334,7 +334,7 @@ SharedPtr<Client> System::loginClient(const MyString &name, const MyString &pass
         if (clients[i]->getPassword() == password)
             return clients[i];
 
-        std::invalid_argument("Wrong password.");
+        throw std::invalid_argument("Wrong password.");
     }
     throw std::invalid_argument("Client with this name not found.");
 }

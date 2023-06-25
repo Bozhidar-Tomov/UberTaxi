@@ -58,6 +58,7 @@ void Driver::getAvailableOrders() const
     if (_upcomingOrders.empty())
         throw std::logic_error("No orders available right now.");
 
+    std::cout << LINE_SEPARATOR << std::endl;
     for (size_t i = 0; i < _upcomingOrders.size(); ++i)
         std::cout << *_upcomingOrders[i] << std::endl
                   << LINE_SEPARATOR << std::endl;
@@ -95,23 +96,21 @@ void Driver::acceptOrder(size_t orderID, unsigned short minutes)
 
 void Driver::declineOrder(size_t orderID)
 {
+    if (_currentOrder)
+        throw std::runtime_error(*MyString("Cannot decline order that is in progress ID (")
+                                      .append(intToChar(_currentOrder->getID()))
+                                      .append(")."));
+
+    if (_upcomingOrders.empty())
+        throw std::runtime_error("No orders available at the moment.");
+
     for (size_t i = 0; i < _upcomingOrders.size(); ++i)
         if (_upcomingOrders[i]->getID() == orderID)
-            try
-            {
-                _sys->notifyClosestDriver(_upcomingOrders[i], this);
-                _upcomingOrders.pop_at(i);
-            }
-            catch (const std::runtime_error &e)
-            {
-                std::cout << e.what() << std::endl
-                          << "Cannot cancel order because you are the only available driver who can take it."
-                          << std::endl;
-            }
-            catch (const std::exception &e)
-            {
-                std::cout << "Cannot decline order. Reason: " << e.what() << std::endl;
-            }
+        {
+            _sys->notifyClosestDriver(_upcomingOrders[i], this);
+            _upcomingOrders.pop_at(i);
+        }
+    throw std::invalid_argument("Order not found.");
 }
 
 void Driver::finishOrder()
@@ -139,10 +138,19 @@ void Driver::removeOrderFromPool(size_t ID)
 std::ostream &operator<<(std::ostream &out, const Driver &obj)
 {
     if (&out == &std::cout)
-        return out << static_cast<const User &>(obj) << std::endl
-                   << "Plate Number: " << obj._plateNumber << std::endl
-                   << "Phone Number: " << obj._phoneNumber << std::endl
-                   << "Rating: " << obj._rating;
+    {
+        out << static_cast<const User &>(obj) << std::endl
+            << "Plate Number: " << obj._plateNumber << std::endl
+            << "Phone Number: " << obj._phoneNumber << std::endl
+            << "Rating: ";
+
+        if (obj._rating)
+            out << obj._rating << std::endl;
+        else
+            out << "not rated" << std::endl;
+
+        return out;
+    }
 
     return out << (const User &)obj << DELIM
                << obj._phoneNumber << DELIM
@@ -191,7 +199,7 @@ std::istream &operator>>(std::istream &in, Driver::Rating &obj)
     return in;
 }
 
-CommandType getDriverCommandType(const MyString &command)
+Optional<CommandType> getDriverCommandType(const MyString &command)
 {
     if (command == "change-address")
         return CommandType::ChangeAddress;
@@ -213,10 +221,15 @@ CommandType getDriverCommandType(const MyString &command)
     if (command == "logout")
         return CommandType::Logout;
 
-    return CommandType::none;
+    return getUserCommandType(command);
 }
 
 void Driver::Rating::addRating(double rating)
 {
     _rating = (_rating * _count + rating) / ++_count;
+}
+
+Driver::Rating::operator bool() const noexcept
+{
+    return _rating != 0;
 }

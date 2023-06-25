@@ -110,6 +110,17 @@ std::istream &operator>>(std::istream &in, User &obj)
     return in;
 }
 
+Optional<CommandType> getUserCommandType(const MyString &command)
+{
+    if (command == "login")
+        return CommandType::Login;
+    if (command == "register")
+        return CommandType::Register;
+    if (command == "logout")
+        return CommandType::Logout;
+    return Optional<CommandType>();
+}
+
 bool User::Messages::empty() const noexcept
 {
     return !count;
